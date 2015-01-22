@@ -1,4 +1,4 @@
-![travis](https://travis-ci.org/prrrnd/atom-git-projects.svg)
+[![Build Status](https://travis-ci.org/prrrnd/atom-git-projects.svg?branch=master)](https://travis-ci.org/prrrnd/atom-git-projects)
 
 ## Git projects
 
