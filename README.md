@@ -1,3 +1,5 @@
+![travis](https://travis-ci.org/prrrnd/atom-git-projects.svg)
+
 ## Git projects
 
 _Git projects_ is a package for Atom, which allows you to quickly list and open your local git repositories.
