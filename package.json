@@ -1,0 +1,21 @@
+{
+  "name": "git-projects",
+  "main": "./lib/git-projects",
+  "version": "0.0.0",
+  "description": "List and open your local Git projects in Atom.",
+  "repository": "https://github.com/prrrnd/atom-git-projects",
+  "license": "MIT",
+  "keywords": [
+    "project",
+    "git",
+    "workflow",
+    "list",
+    "open"
+  ],
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "^2.0.3"
+  }
+}
