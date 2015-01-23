@@ -10,7 +10,7 @@ apm install git-projects
 ```
 
 ### Settings
-By default, _Git projects_ will search for repositories in `~/repos`.
+By default, _Git projects_ will search for repositories from `~/repos`.
 You can, however, set a custom `rootPath` in the Package Settings.<br/>
 
 
@@ -19,8 +19,10 @@ You can, however, set a custom `rootPath` in the Package Settings.<br/>
 Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 ### TODO
-<input type="checkbox"> Better specs coverage
-<input type="checkbox"> Recursive search for Git repositories
+<ul>
+<li><input type="checkbox"> Better specs coverage
+<li><input type="checkbox" disabled checked> Recursive search for Git repositories
+</ul>
 
 ### Contributing
 
