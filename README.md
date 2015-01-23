@@ -19,10 +19,11 @@ You can, however, set a custom `rootPath` in the Package Settings.<br/>
 Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 ### TODO
-<ul>
-<li><input type="checkbox"> Better specs coverage
-<li><input type="checkbox" disabled checked> Recursive search for Git repositories
-</ul>
+
+<input type="checkbox" disabled checked> Recursive search from root path
+<input type="checkbox" disabled checked> Projects are sorted by name
+<input type="checkbox"> Better specs coverage
+
 
 ### Contributing
 

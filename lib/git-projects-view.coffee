@@ -70,8 +70,12 @@ class GitProjectsView extends SelectListView
         else if fs.lstatSync(projectPath).isDirectory()
           @getGitProjects(projectPath + path.sep)
 
-    return projects
+    return @sortBy(projects)
 
   isGitProject: (project) ->
     gitDir = project + path.sep + ".git"
     fs.lstatSync(project).isDirectory() && fs.existsSync(gitDir) && fs.lstatSync(gitDir).isDirectory()
+
+  sortBy: (projects) ->
+    projects.sort (a, b) ->
+      a['title'].toUpperCase() > b['title'].toUpperCase()
