@@ -48,6 +48,7 @@ class GitProjectsView extends SelectListView
     @panel ?= atom.workspace.addModalPanel(item: this)
     @panel.show()
     rootPath = atom.config.get('git-projects.rootPath') + path.sep
+    projects = []
     @setItems(@getGitProjects(rootPath))
     @focusFilterEditor()
 
