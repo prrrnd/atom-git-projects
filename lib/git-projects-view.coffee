@@ -1,10 +1,11 @@
 {$, $$, SelectListView, View} = require 'atom-space-pen-views'
 fs = require 'fs'
 path = require 'path'
-
+projects = []
 module.exports =
 class GitProjectsView extends SelectListView
   gitProjects: null
+
   activate: ->
     new GitProjectsView
 
@@ -59,12 +60,15 @@ class GitProjectsView extends SelectListView
           @span path
 
   getGitProjects: (rootPath) ->
-    projects = []
     if fs.existsSync(rootPath)
       gitProjects = fs.readdirSync(rootPath)
       for index, project of gitProjects
         projectPath = rootPath + project
-        projects.push({title: project, path: projectPath}) if @isGitProject(projectPath)
+        if @isGitProject(projectPath)
+          projects.push({title: project, path: projectPath})
+        else if fs.lstatSync(projectPath).isDirectory()
+          @getGitProjects(projectPath + path.sep)
+
     return projects
 
   isGitProject: (project) ->
