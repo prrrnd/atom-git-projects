@@ -11,6 +11,6 @@ describe "GitProjects", ->
     waitsForPromise = atom.packages.activatePackage('git-projects')
 
   describe "when the git-projects:toggle event is triggered", ->
-     it "Shows the view containing the list of projects", ->
+    it "Shows the view containing the list of projects", ->
       atom.commands.dispatch workspaceElement, 'git-projects:toggle'
       expect($(workspaceElement).find('.git-projects')).toExist()
