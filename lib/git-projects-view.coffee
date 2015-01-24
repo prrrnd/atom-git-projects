@@ -1,7 +1,7 @@
 {$, $$, SelectListView, View} = require 'atom-space-pen-views'
 fs = require 'fs'
 path = require 'path'
-projects = []
+
 module.exports =
 class GitProjectsView extends SelectListView
   gitProjects: null
@@ -43,13 +43,13 @@ class GitProjectsView extends SelectListView
 
   hide: ->
     @panel?.hide()
+    @gitProjects.clearProjectsList()
 
   show: ->
     @panel ?= atom.workspace.addModalPanel(item: this)
     @panel.show()
     rootPath = atom.config.get('git-projects.rootPath') + path.sep
-    projects = []
-    @setItems(@getGitProjects(rootPath))
+    @setItems(@gitProjects.getGitProjects(rootPath))
     @focusFilterEditor()
 
   viewForItem: ({title, path}) ->
@@ -59,23 +59,3 @@ class GitProjectsView extends SelectListView
           @span title
         @div class: 'secondary-line', =>
           @span path
-
-  getGitProjects: (rootPath) ->
-    if fs.existsSync(rootPath)
-      gitProjects = fs.readdirSync(rootPath)
-      for index, project of gitProjects
-        projectPath = rootPath + project
-        if @isGitProject(projectPath)
-          projects.push({title: project, path: projectPath})
-        else if fs.lstatSync(projectPath).isDirectory()
-          @getGitProjects(projectPath + path.sep)
-
-    return @sortBy(projects)
-
-  isGitProject: (project) ->
-    gitDir = project + path.sep + ".git"
-    fs.lstatSync(project).isDirectory() && fs.existsSync(gitDir) && fs.lstatSync(gitDir).isDirectory()
-
-  sortBy: (projects) ->
-    projects.sort (a, b) ->
-      a['title'].toUpperCase() > b['title'].toUpperCase()
