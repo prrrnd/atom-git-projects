@@ -1,22 +1,23 @@
 fs = require 'fs'
 path = require 'path'
 utils = require './utils'
+settings = require './settings'
+GitProjectsView = require './views/git-projects-view'
+Project = require './models/project'
 
-GitProjectsView = require './git-projects-view'
-
-projects = []
 module.exports =
   config:
     rootPath:
       title: "Path to the directory from which Git projects should be searched for"
       type: "string"
-      default: utils.getHomeDir() + path.sep + "repos"
+      default: settings.getDefaultRootPath()
     sortBy:
       title: "Sort by"
       type: "string"
       default: "Project name"
       enum: ["Project name", "Latest modification date"]
 
+  projects: []
   gitProjectsView: null
 
   activate: (state) ->
@@ -34,14 +35,14 @@ module.exports =
   getGitProjects: (rootPath) ->
     if fs.existsSync(rootPath)
       gitProjects = fs.readdirSync(rootPath)
-      for index, project of gitProjects
-        projectPath = rootPath + project
+      for index, name of gitProjects
+        projectPath = rootPath + name
         if utils.isGitProject(projectPath)
-          projects.push({title: project, path: projectPath})
+          @projects.push(new Project(name, projectPath))
         else if fs.lstatSync(projectPath).isDirectory()
           @getGitProjects(projectPath + path.sep)
 
-    return utils.sortBy(projects)
+    return utils.sortBy(@projects)
 
   clearProjectsList: ->
-    projects = []
+    @projects = []

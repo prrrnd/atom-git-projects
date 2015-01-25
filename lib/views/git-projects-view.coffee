@@ -1,6 +1,7 @@
 {$, $$, SelectListView, View} = require 'atom-space-pen-views'
 fs = require 'fs'
 path = require 'path'
+Project = require '../models/project'
 
 module.exports =
 class GitProjectsView extends SelectListView
@@ -29,10 +30,11 @@ class GitProjectsView extends SelectListView
     @cancel()
 
   getEmptyMessage: (itemCount, filteredItemCount) =>
-    if not itemCount
-      'No Git projects found in ' + atom.config.get('git-projects.rootPath')
-    else
-      super
+    msg = "No Git projects found in '#{atom.config.get('git-projects.rootPath')}'"
+    query = @getFilterQuery()
+    return "#{msg} for '#{query}'" if !filteredItemCount && query.length
+    return msg unless itemCount
+    return super
 
   toggle: (gitProjects) ->
     @gitProjects = gitProjects
@@ -52,10 +54,10 @@ class GitProjectsView extends SelectListView
     @setItems(@gitProjects.getGitProjects(rootPath))
     @focusFilterEditor()
 
-  viewForItem: ({title, path}) ->
+  viewForItem: (project) ->
     $$ ->
       @li class: 'two-lines', =>
         @div class: 'primary-line', =>
-          @span title
+          @span project.title
         @div class: 'secondary-line', =>
-          @span path
+          @span project.path

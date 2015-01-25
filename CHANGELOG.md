@@ -1,3 +1,7 @@
+## 1.3.0
+* Projects can now also be sorted by last modification date
+* Improvements for Windows and Linux users
+
 ## 1.2.0
 * Projects are now sorted by name
 
