@@ -16,6 +16,10 @@ module.exports =
       type: "string"
       default: "Project name"
       enum: ["Project name", "Latest modification date"]
+    showSubRepos:
+      title: "Show sub-repositories"
+      type: "boolean"
+      default: false
 
   projects: []
   gitProjectsView: null
@@ -37,10 +41,12 @@ module.exports =
       gitProjects = fs.readdirSync(rootPath)
       for index, name of gitProjects
         projectPath = rootPath + name
-        if utils.isGitProject(projectPath)
-          @projects.push(new Project(name, projectPath))
-        else if fs.lstatSync(projectPath).isDirectory()
-          @getGitProjects(projectPath + path.sep)
+        if fs.lstatSync(projectPath).isDirectory()
+          if utils.isGitProject(projectPath)
+            @projects.push(new Project(name, projectPath))
+            if atom.config.get('git-projects.showSubRepos')
+              @getGitProjects(projectPath + path.sep)
+          else @getGitProjects(projectPath + path.sep)
 
     return utils.sortBy(@projects)
 
