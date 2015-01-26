@@ -1,3 +1,6 @@
+## 1.4.0
+* Added support for sub-repositories
+
 ## 1.3.0
 * Projects can now also be sorted by last modification date
 * Improvements for Windows and Linux users
