@@ -2,6 +2,7 @@ fs = require 'fs'
 path = require 'path'
 utils = require './utils'
 settings = require './settings'
+CSON = require 'season'
 GitProjectsView = require './views/git-projects-view'
 Project = require './models/project'
 
@@ -43,7 +44,10 @@ module.exports =
         projectPath = rootPath + name
         if fs.lstatSync(projectPath).isDirectory()
           if utils.isGitProject(projectPath)
-            @projects.push(new Project(name, projectPath))
+            project = new Project(name, projectPath)
+            data = @readProjectConfigFile(project)
+            project = @updateProjectFromConfigFileData(data, project)
+            @projects.push(project)
             if atom.config.get('git-projects.showSubRepos')
               @getGitProjects(projectPath + path.sep)
           else @getGitProjects(projectPath + path.sep)
@@ -52,3 +56,12 @@ module.exports =
 
   clearProjectsList: ->
     @projects = []
+
+  readProjectConfigFile: (project) ->
+    filepath = project.path + path.sep + ".git-project"
+    data = {}
+    data = CSON.readFileSync(filepath) if fs.existsSync(filepath)
+
+  updateProjectFromConfigFileData: (data, project) ->
+    project.title = data['title'] if data? && data['title']?
+    project
