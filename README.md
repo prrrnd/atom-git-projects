@@ -25,6 +25,19 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 | `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"` |
 | `showSubRepos`   | `false`          | `true`, `false`                              |
 
+### Project-specific configuration
+
+From version 1.5.0, _Git projects_ will read the content of any `.git-project` file located at the root of your Git repository.
+You can set a custom title for any project that will be shown in the list view.
+Here is an example:
+```json
+{
+  "title": "Project Title"
+}
+```
+
+More options will be available in the future.
+
 ### Contributing
 
 1. Fork it ( https://github.com/prrrnd/atom-git-projects/fork )

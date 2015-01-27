@@ -1,3 +1,6 @@
+## 1.5.0
+* Possibility to set a custom name for each project via a .git-project file
+
 ## 1.4.0
 * Added support for sub-repositories
 
