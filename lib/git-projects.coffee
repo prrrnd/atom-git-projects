@@ -21,6 +21,10 @@ module.exports =
       title: "Show sub-repositories"
       type: "boolean"
       default: false
+    openInDevMode:
+      title: "Open in development mode"
+      type: "boolean"
+      default: false
 
   projects: []
   gitProjectsView: null
@@ -33,6 +37,7 @@ module.exports =
   openProject: (project) ->
     atom.open options =
       pathsToOpen: [project.path]
+      devMode: atom.config.get('git-projects.openInDevMode')
 
   createGitProjectsViewView: (state) ->
     @gitProjectsView ?= new GitProjectsView()
