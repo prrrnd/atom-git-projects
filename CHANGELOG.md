@@ -1,3 +1,7 @@
+## 1.6.0
+* Possibility to open projects in dev mode (Thanks [@mark-hahn](https://github.com/mark-hahn))
+* Possibility to ignore projects
+
 ## 1.5.0
 * Possibility to set a custom name for each project via a .git-project file
 
