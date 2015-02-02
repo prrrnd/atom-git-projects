@@ -16,7 +16,7 @@ module.exports =
       title: "Sort by"
       type: "string"
       default: "Project name"
-      enum: ["Project name", "Latest modification date"]
+      enum: ["Project name", "Latest modification date", "Size"]
     showSubRepos:
       title: "Show sub-repositories"
       type: "boolean"
