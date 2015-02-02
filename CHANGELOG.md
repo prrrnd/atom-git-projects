@@ -1,3 +1,6 @@
+## 1.7.0
+* Projects can now also be sorted by size
+
 ## 1.6.0
 * Possibility to open projects in dev mode (Thanks [@mark-hahn](https://github.com/mark-hahn))
 * Possibility to ignore projects

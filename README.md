@@ -19,12 +19,12 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 ### Settings
 
-| Key              | Default value    | Possible values                              |
-|------------------|------------------|----------------------------------------------|
-| `rootPath`       | `~/`             | Any path to a directory                      |
-| `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"` |
-| `showSubRepos`   | `false`          | `true`, `false`                              |
-| `openInDevMode`  | `false`          | `true`, `false`                              |
+| Key              | Default value    | Possible values                                        |
+|------------------|------------------|--------------------------------------------------------|
+| `rootPath`       | `~/`             | Any path to a directory                                |
+| `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"`, `"Size"` |
+| `showSubRepos`   | `false`          | `true`, `false`                                        |
+| `openInDevMode`  | `false`          | `true`, `false`                                        |
 
 ### Project-specific configuration
 
