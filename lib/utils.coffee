@@ -15,8 +15,8 @@ isDir: (path) ->
 sortBy: (array) ->
   array.sort (a, b) ->
     if atom.config.get('git-projects.sortBy') is 'Project name'
-      a['title'].toUpperCase() > b['title'].toUpperCase()
-    if atom.config.get('git-projects.sortBy') is 'Latest modification date'
+      a.title.toUpperCase() > b.title.toUpperCase()
+    else if atom.config.get('git-projects.sortBy') is 'Latest modification date'
       fs.statSync(a.path)['mtime'] < fs.statSync(b.path)['mtime']
-    if atom.config.get('git-projects.sortBy') is 'Size'
+    else if atom.config.get('git-projects.sortBy') is 'Size'
       fs.statSync(a.path)['size'] < fs.statSync(b.path)['size']
