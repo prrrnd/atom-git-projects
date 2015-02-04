@@ -1,3 +1,6 @@
+## 1.7.1
+* Fixes an issue related to sorting
+
 ## 1.7.0
 * Projects can now also be sorted by size
 
