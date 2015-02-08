@@ -4,6 +4,8 @@
 
 _Git projects_ is a package for Atom, which allows you to quickly list and open your local git repositories.
 
+[![Git projects](capture.gif)](https://atom.io/packages/git-projects)
+
 ### Installation
 
 Simply run the following command:
