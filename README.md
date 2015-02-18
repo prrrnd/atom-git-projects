@@ -23,7 +23,7 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 | Key              | Default value    | Possible values                                            |
 |------------------|------------------|------------------------------------------------------------|
-| `rootPaths`      | `~/`             | One or more directories containing projects, sep. by **;** |
+| `rootPath`       | `~/`             | One or more directories containing projects, sep. by **;** |
 | `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"`, `"Size"`     |
 | `showSubRepos`   | `false`          | `true`, `false`                                            |
 | `openInDevMode`  | `false`          | `true`, `false`                                            |

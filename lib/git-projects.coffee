@@ -8,10 +8,10 @@ Project = require './models/project'
 
 module.exports =
   config:
-    rootPaths:
+    rootPath:
       title: "Paths to folders containing project folders. Separate paths with semicolons."
       type: "string"
-      default: settings.getDefaultRootPaths()
+      default: settings.getDefaultRootPath()
     sortBy:
       title: "Sort by"
       type: "string"
@@ -42,8 +42,8 @@ module.exports =
   createGitProjectsViewView: (state) ->
     @gitProjectsView ?= new GitProjectsView()
 
-  getGitProjects: (rootPaths) ->
-    rootPaths = rootPaths.split(/\s*;\s*/g)
+  getGitProjects: (rootPath) ->
+    rootPaths = rootPath.split(/\s*;\s*/g)
     for rootPath in rootPaths when fs.existsSync(rootPath)
       rootPath = rootPath + path.sep if rootPath[-1..-1] isnt path.sep
       gitProjects = fs.readdirSync(rootPath)

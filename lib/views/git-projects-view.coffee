@@ -30,7 +30,7 @@ class GitProjectsView extends SelectListView
     @cancel()
 
   getEmptyMessage: (itemCount, filteredItemCount) =>
-    msg = "No Git projects found in '#{atom.config.get('git-projects.rootPaths')}'"
+    msg = "No Git projects found in '#{atom.config.get('git-projects.rootPath')}'"
     query = @getFilterQuery()
     return "#{msg} for '#{query}'" if !filteredItemCount && query.length
     return msg unless itemCount
@@ -50,8 +50,8 @@ class GitProjectsView extends SelectListView
   show: ->
     @panel ?= atom.workspace.addModalPanel(item: this)
     @panel.show()
-    rootPaths = atom.config.get('git-projects.rootPaths')
-    @setItems(@gitProjects.getGitProjects(rootPaths))
+    rootPath = atom.config.get('git-projects.rootPath')
+    @setItems(@gitProjects.getGitProjects(rootPath))
     @focusFilterEditor()
 
   viewForItem: (project) ->
