@@ -45,7 +45,7 @@ module.exports =
   getGitProjects: (rootPaths) ->
     rootPaths = rootPaths.split(/\s*;\s*/g)
     for rootPath in rootPaths when fs.existsSync(rootPath)
-      rootPath = rootPath + path.sep
+      rootPath = rootPath + path.sep if rootPath[-1..-1] isnt path.sep
       gitProjects = fs.readdirSync(rootPath)
       for index, name of gitProjects
         projectPath = rootPath + name
