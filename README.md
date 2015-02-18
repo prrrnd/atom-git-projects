@@ -21,16 +21,16 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 ### Settings
 
-| Key              | Default value    | Possible values                                        |
-|------------------|------------------|--------------------------------------------------------|
-| `rootPath`       | `~/`             | Any path to a directory                                |
-| `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"`, `"Size"` |
-| `showSubRepos`   | `false`          | `true`, `false`                                        |
-| `openInDevMode`  | `false`          | `true`, `false`                                        |
+| Key              | Default value    | Possible values                                            |
+|------------------|------------------|------------------------------------------------------------|
+| `dirPaths`       | `~/`             | One or more directories containing projects, sep. by **;** |
+| `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"`, `"Size"`     |
+| `showSubRepos`   | `false`          | `true`, `false`                                            |
+| `openInDevMode`  | `false`          | `true`, `false`                                            |
 
 ### Project-specific configuration
 
-_Git projects_ will read the content of any `.git-project` file located at the root of your Git repository.
+_Git projects_ will read the content of any `.git-project` file located at the root of your Git repository (project).
 You can set a custom title for any project that will be shown in the list view.
 Here is an example:
 ```json

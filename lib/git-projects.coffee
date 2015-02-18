@@ -8,10 +8,10 @@ Project = require './models/project'
 
 module.exports =
   config:
-    rootPath:
-      title: "Path to the directory from which Git projects should be searched for"
+    rootPaths:
+      title: "Paths to folders containing project folders. Separate paths with semicolons."
       type: "string"
-      default: settings.getDefaultRootPath()
+      default: settings.getDefaultRootPaths()
     sortBy:
       title: "Sort by"
       type: "string"
@@ -42,8 +42,10 @@ module.exports =
   createGitProjectsViewView: (state) ->
     @gitProjectsView ?= new GitProjectsView()
 
-  getGitProjects: (rootPath) ->
-    if fs.existsSync(rootPath)
+  getGitProjects: (rootPaths) ->
+    rootPaths = rootPaths.split(/\s*;\s*/g)
+    for rootPath in rootPaths when fs.existsSync(rootPath)
+      rootPath = rootPath + path.sep
       gitProjects = fs.readdirSync(rootPath)
       for index, name of gitProjects
         projectPath = rootPath + name
@@ -54,8 +56,8 @@ module.exports =
             project = @updateProjectFromConfigFileData(data, project)
             @projects.push(project) if !project.ignored
             if atom.config.get('git-projects.showSubRepos')
-              @getGitProjects(projectPath + path.sep)
-          else @getGitProjects(projectPath + path.sep)
+              @getGitProjects(projectPath)
+          else @getGitProjects(projectPath)
 
     return utils.sortBy(@projects)
 
