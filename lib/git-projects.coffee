@@ -43,6 +43,7 @@ module.exports =
     @gitProjectsView ?= new GitProjectsView()
 
   getGitProjects: (rootPath) ->
+    rootPath ?= settings.getDefaultRootPath()
     rootPaths = rootPath.split(/\s*;\s*/g)
     for rootPath in rootPaths when fs.existsSync(rootPath)
       rootPath = rootPath + path.sep if rootPath[-1..-1] isnt path.sep
