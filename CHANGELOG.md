@@ -1,3 +1,6 @@
+## 1.8.0
+* Possibility to list projects from more than one root path (Thanks [@mark-hahn](https://github.com/mark-hahn))
+
 ## 1.7.1
 * Fixes an issue related to sorting
 
