@@ -5,6 +5,7 @@
   "description": "List and open your local Git projects in Atom.",
   "repository": "https://github.com/prrrnd/atom-git-projects",
   "license": "MIT",
+  "activationEvents": ["git-projects:toggle"],
   "keywords": [
     "project",
     "git",
