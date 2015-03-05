@@ -5,13 +5,22 @@ settings = require './settings'
 CSON = require 'season'
 GitProjectsView = require './views/git-projects-view'
 Project = require './models/project'
+separator = "Separate paths with semicolons"
 
 module.exports =
   config:
     rootPath:
-      title: "Paths to folders containing project folders. Separate paths with semicolons."
+      title: "Paths to folders containing project folders. #{separator}."
       type: "string"
       default: settings.getDefaultRootPath()
+    ignoredPath:
+      title: "Paths to folders that should be ignored. #{separator}."
+      type: "string"
+      default: ""
+    ignoredPatterns:
+      title: "Patterns that should be ignored (e.g.: node_modules). #{separator}."
+      type: "string"
+      default: "node_modules;.git"
     sortBy:
       title: "Sort by"
       type: "string"
@@ -42,23 +51,49 @@ module.exports =
   createGitProjectsViewView: (state) ->
     @gitProjectsView ?= new GitProjectsView()
 
-  getGitProjects: (rootPath) ->
-    rootPath ?= settings.getDefaultRootPath()
-    rootPaths = rootPath.split(/\s*;\s*/g)
-    for rootPath in rootPaths when fs.existsSync(rootPath)
-      rootPath = rootPath + path.sep if rootPath[-1..-1] isnt path.sep
-      gitProjects = fs.readdirSync(rootPath)
-      for index, name of gitProjects
-        projectPath = rootPath + name
-        if fs.lstatSync(projectPath).isDirectory()
+  parsePathString: (str) ->
+    if str
+      paths = str.split(/\s*;\s*/g).map (_str) ->
+        _str = _str.trim().replace /^~/g, utils.getHomeDir()
+        if _str[-1..-1] isnt path.sep then _str + path.sep else _str
+
+    new Set paths
+
+  getGitProjects: (rootPath=settings.getDefaultRootPath(), ignoredPath="", ignoredPattern="") ->
+    rootPaths = @parsePathString rootPath
+    ignoredPaths = @parsePathString ignoredPath
+
+    if ignoredPattern
+      if Object::toString.call( ignoredPattern ) == "[object RegExp]"
+        ignoredPatterns = ignoredPattern
+      else
+        patterns = ignoredPattern.split(/\s*;\s*/g).map (pattern) ->
+          pattern.trim().replace /^~/g, utils.getHomeDir()
+        ignoredPatterns = new RegExp patterns.join("|"), "g"
+
+    rootPaths.forEach (_path) =>
+      if (ignoredPatterns and ignoredPatterns.test(_path)) or
+         ignoredPaths.has(_path) or
+         !fs.existsSync(_path)
+        return
+
+      gitProjects = fs.readdirSync(_path)
+
+      for _, name of gitProjects
+        projectPath = _path + name
+
+        if (!ignoredPatterns or !ignoredPatterns.test(_path)) and
+           !ignoredPaths.has(projectPath + path.sep) and
+           fs.lstatSync(projectPath).isDirectory()
+
           if utils.isGitProject(projectPath)
             project = new Project(name, projectPath, false)
             data = @readProjectConfigFile(project)
             project = @updateProjectFromConfigFileData(data, project)
             @projects.push(project) if !project.ignored
             if atom.config.get('git-projects.showSubRepos')
-              @getGitProjects(projectPath)
-          else @getGitProjects(projectPath)
+              @getGitProjects(projectPath, ignoredPath, ignoredPatterns)
+          else @getGitProjects(projectPath, ignoredPath, ignoredPatterns)
 
     return utils.sortBy(@projects)
 

@@ -14,3 +14,8 @@ describe "GitProjects", ->
     it "Shows the view containing the list of projects", ->
       atom.commands.dispatch workspaceElement, 'git-projects:toggle'
       expect($(workspaceElement).find('.git-projects')).toExist()
+
+  describe "getGitProjects", ->
+    it "should return an array", ->
+        atom.config.set('git-projects.showSubRepos', true)
+        expect(GitProjects.getGitProjects("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")).toBeArray
