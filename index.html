@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Git projects by prrrnd</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Git projects</h1>
+        <p>List and open your local Git projects in Atom.</p>
+
+        <p class="view"><a href="https://github.com/prrrnd/atom-git-projects">View the Project on GitHub <small>prrrnd/atom-git-projects</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/prrrnd/atom-git-projects/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/prrrnd/atom-git-projects/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/prrrnd/atom-git-projects">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="https://travis-ci.org/prrrnd/atom-git-projects"><img src="https://travis-ci.org/prrrnd/atom-git-projects.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a id="git-projects" class="anchor" href="#git-projects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Git projects</h2>
+
+<p><em>Git projects</em> is a package for Atom, which allows you to quickly list and open your local git repositories.</p>
+
+<p><a href="https://atom.io/packages/git-projects"><img src="https://github.com/prrrnd/atom-git-projects/raw/master/capture.gif" alt="Git projects"></a></p>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Simply run the following command:</p>
+
+<div class="highlight highlight-sh"><pre>apm install git-projects</pre></div>
+
+<p>Or find the package in <strong>Atom</strong> → <strong>Settings</strong> → <strong>Install</strong> and search for "<strong>git-projects</strong>"</p>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<p>Press <code>ctrl + alt + o</code> or type <strong>Git Projects</strong> in the Command Palette.</p>
+
+<h3>
+<a id="settings" class="anchor" href="#settings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Settings</h3>
+
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default value</th>
+<th>Possible values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rootPath</code></td>
+<td><code>~/</code></td>
+<td>One or more directories containing projects, sep. by <code>;</code>
+</td>
+</tr>
+<tr>
+<td><code>ignoredPath</code></td>
+<td><code></code></td>
+<td>One or more directories containing projects, sep. by <code>;</code>
+</td>
+</tr>
+<tr>
+<td><code>ignoredPatterns</code></td>
+<td><code>node_modules;.git</code></td>
+<td>One or more patterns to ignore, sep. by <code>;</code>
+</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td><code>"Project name"</code></td>
+<td>
+<code>"Project name"</code>, <code>"Last modification date"</code>, <code>"Size"</code>
+</td>
+</tr>
+<tr>
+<td><code>showSubRepos</code></td>
+<td><code>false</code></td>
+<td>
+<code>true</code>, <code>false</code>
+</td>
+</tr>
+<tr>
+<td><code>openInDevMode</code></td>
+<td><code>false</code></td>
+<td>
+<code>true</code>, <code>false</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="project-specific-configuration" class="anchor" href="#project-specific-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project-specific configuration</h3>
+
+<p><em>Git projects</em> will read the content of any <code>.git-project</code> file located at the root of your Git repository (project).
+You can set a custom title for any project that will be shown in the list view.
+Here is an example:</p>
+
+<div class="highlight highlight-json"><pre>{
+  <span class="pl-s1"><span class="pl-pds">"</span>title<span class="pl-pds">"</span></span>: <span class="pl-s1"><span class="pl-pds">"</span>Project Title<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<p>If you don't want a project to be listed, add a <code>.git-project</code> file at its root with the following content:</p>
+
+<div class="highlight highlight-json"><pre>{
+  <span class="pl-s1"><span class="pl-pds">"</span>ignored<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+}</pre></div>
+
+<p>More options will be available in the future.</p>
+
+<h3>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h3>
+
+<ol>
+<li>Fork it ( <a href="https://github.com/prrrnd/atom-git-projects/fork">https://github.com/prrrnd/atom-git-projects/fork</a> )</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
+
+<h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h3>
+
+<p>Released under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/prrrnd">prrrnd</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
