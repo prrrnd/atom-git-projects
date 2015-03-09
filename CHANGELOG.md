@@ -1,3 +1,14 @@
+## 1.9.0
+* Improved sorting
+* Added activationCommands, reduces atom load time
+* Possibility to ignore patterns and paths (See README for details)
+* More specs
+
+Thanks to [@mark-hahn](https://github.com/mark-hahn), [@nicolasbrugneaux](https://github.com/nicolasbrugneaux)
+
+## 1.8.1
+* Updated README, fixes screenshot link on atom.io
+
 ## 1.8.0
 * Possibility to list projects from more than one root path (Thanks [@mark-hahn](https://github.com/mark-hahn))
 
