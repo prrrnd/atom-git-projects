@@ -21,12 +21,14 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 ### Settings
 
-| Key              | Default value    | Possible values                                            |
-|------------------|------------------|------------------------------------------------------------|
-| `rootPath`       | `~/`             | One or more directories containing projects, sep. by **;** |
-| `sortBy`         | `"Project name"` | `"Project name"`, `"Last modification date"`, `"Size"`     |
-| `showSubRepos`   | `false`          | `true`, `false`                                            |
-| `openInDevMode`  | `false`          | `true`, `false`                                            |
+| Key              | Default value      | Possible values                                            |
+|------------------|--------------------|------------------------------------------------------------|
+| `rootPath`       | `~/`               | One or more directories containing projects, sep. by `;`   |
+| `ignoredPath`    | ` `                | One or more directories containing projects, sep. by `;`   |
+| `ignoredPatterns`| `node_modules;.git`| One or more patterns to ignore, sep. by `;`                |
+| `sortBy`         | `"Project name"`   | `"Project name"`, `"Last modification date"`, `"Size"`     |
+| `showSubRepos`   | `false`            | `true`, `false`                                            |
+| `openInDevMode`  | `false`            | `true`, `false`                                            |
 
 ### Project-specific configuration
 
