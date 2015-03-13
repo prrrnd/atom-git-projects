@@ -6,6 +6,8 @@ CSON = require 'season'
 GitProjectsView = require './views/git-projects-view'
 Project = require './models/project'
 separator = "Separate paths with semicolons"
+packageVersion = require("../package.json").version
+packageConfigFilePath = __dirname + "/../.config"
 
 module.exports =
   config:
@@ -38,10 +40,21 @@ module.exports =
   projects: []
   gitProjectsView: null
 
+  readPackageConfigFile: ->
+    if fs.existsSync(packageConfigFilePath)
+      CSON.readFileSync(packageConfigFilePath)
+
+  writePackageConfigFile: ->
+    CSON.writeFileSync(packageConfigFilePath, {version: packageVersion})
+
   activate: (state) ->
     atom.commands.add 'atom-workspace',
       'git-projects:toggle': =>
         @createGitProjectsViewView(state).toggle(@)
+        packageConfigContent = @.readPackageConfigFile()
+        if !packageConfigContent || packageConfigContent.version != packageVersion
+          @.writePackageConfigFile()
+          atom.notifications.addInfo('<strong>Thanks for using <code>Git projects</code> !</strong><br> Any issue? <a href=\"https://github.com/prrrnd/atom-git-projects\">Let us know!</a>', dismissable: true)
 
   openProject: (project) ->
     atom.open options =
