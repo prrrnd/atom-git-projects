@@ -3,11 +3,11 @@ path = require 'path'
 
 sorts = new Map
 sorts.set 'Project name', (a, b) ->
-    a.title.toUpperCase() > b.title.toUpperCase()
+  a.title.toUpperCase() > b.title.toUpperCase()
 sorts.set 'Latest modification date', (a, b) ->
-    fs.statSync(a.path)['mtime'] < fs.statSync(b.path)['mtime']
+  fs.statSync(a.path)['mtime'] < fs.statSync(b.path)['mtime']
 sorts.set 'Size', (a, b) ->
-    fs.statSync(a.path)['size'] < fs.statSync(b.path)['size']
+  fs.statSync(a.path)['size'] < fs.statSync(b.path)['size']
 
 module.exports =
 getHomeDir: ->
