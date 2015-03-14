@@ -44,17 +44,20 @@ module.exports =
     if fs.existsSync(packageConfigFilePath)
       CSON.readFileSync(packageConfigFilePath)
 
-  writePackageConfigFile: ->
-    CSON.writeFileSync(packageConfigFilePath, {version: packageVersion})
+  writePackageConfigFile: (object) ->
+    CSON.writeFileSync(packageConfigFilePath, object)
 
   activate: (state) ->
     atom.commands.add 'atom-workspace',
       'git-projects:toggle': =>
         @createGitProjectsViewView(state).toggle(@)
-        packageConfigContent = @.readPackageConfigFile()
-        if !packageConfigContent || packageConfigContent.version != packageVersion
-          @.writePackageConfigFile()
-          atom.notifications.addInfo('<strong>Thanks for using <code>Git projects</code> !</strong><br> Any issue? <a href=\"https://github.com/prrrnd/atom-git-projects\">Let us know!</a>', dismissable: true)
+        @reportIssueMessage()
+
+  reportIssueMessage: ->
+    packageConfig = @readPackageConfigFile()
+    if !packageConfig || packageConfig.version != packageVersion
+      @writePackageConfigFile({version: packageVersion})
+      atom.notifications.addInfo('<strong>Thanks for using <em>Git projects</em> !</strong><br> Any issue? <a href=\"https://github.com/prrrnd/atom-git-projects/issues/new\">Let us know!</a>', dismissable: true)
 
   openProject: (project) ->
     atom.open options =
