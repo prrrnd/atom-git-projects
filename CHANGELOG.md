@@ -1,3 +1,6 @@
+## 1.10.0
+* Added a notification to report possible issues, shows up once for every version
+
 ## 1.9.0
 * Improved sorting
 * Added activationCommands, reduces atom load time
