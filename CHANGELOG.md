@@ -1,3 +1,7 @@
+## 1.10.1
+* Fixes a bug that would prevent projects to be found if the path contains 'git'
+* Removed activationCommands for now, see [atom/settings-view#356](https://github.com/atom/settings-view/issues/356)
+
 ## 1.10.0
 * Added a notification to report possible issues, shows up once for every version
 
