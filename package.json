@@ -1,7 +1,7 @@
 {
   "name": "git-projects",
   "main": "./lib/git-projects",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "List and open your local Git projects in Atom.",
   "repository": "https://github.com/prrrnd/atom-git-projects",
   "license": "MIT",
