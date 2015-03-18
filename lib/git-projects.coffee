@@ -22,7 +22,7 @@ module.exports =
     ignoredPatterns:
       title: "Patterns that should be ignored (e.g.: node_modules). #{separator}."
       type: "string"
-      default: "node_modules;.git"
+      default: "node_modules;\\.git"
     sortBy:
       title: "Sort by"
       type: "string"
