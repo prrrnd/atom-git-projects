@@ -1,3 +1,3 @@
 module.exports =
 class Project
-  constructor: (@title, @path, @ignored) ->
+  constructor: (@title, @path, @icon, @ignored) ->

@@ -59,7 +59,8 @@ class GitProjectsView extends SelectListView
   viewForItem: (project) ->
     $$ ->
       @li class: 'two-lines', =>
-        @div class: 'primary-line', =>
+        @div class: 'status status-added'
+        @div class: 'primary-line icon ' + project.icon, =>
           @span project.title
-        @div class: 'secondary-line', =>
+        @div class: 'secondary-line no-icon', =>
           @span project.path

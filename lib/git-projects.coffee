@@ -108,7 +108,7 @@ module.exports =
            fs.lstatSync(projectPath).isDirectory()
 
           if utils.isGitProject(projectPath)
-            project = new Project(name, projectPath, false)
+            project = new Project(name, projectPath, "icon-repo", false)
             data = @readProjectConfigFile(project)
             project = @updateProjectFromConfigFileData(data, project)
             @projects.push(project) if !project.ignored
@@ -130,4 +130,5 @@ module.exports =
     return project unless data?
     project.title = data['title'] if data['title']?
     project.ignored = data['ignore'] if data['ignore']?
+    project.icon = data['icon'] if data['icon']?
     project
