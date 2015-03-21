@@ -53,8 +53,12 @@ class GitProjectsView extends SelectListView
     rootPath = atom.config.get('git-projects.rootPath')
     ignoredPath = atom.config.get('git-projects.ignoredPath')
     ignoredPatterns = atom.config.get('git-projects.ignoredPatterns')
-    @setItems(@gitProjects.getGitProjects(rootPath, ignoredPath, ignoredPatterns))
-    @focusFilterEditor()
+    @loading.text "Looking for repositories in #{rootPath} ..."
+    @loadingArea.show()
+    setTimeout( =>
+      @setItems(@gitProjects.getGitProjects(rootPath, ignoredPath, ignoredPatterns))
+      @focusFilterEditor()
+    , 0)
 
   viewForItem: (project) ->
     $$ ->
