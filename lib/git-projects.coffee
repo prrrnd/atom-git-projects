@@ -36,6 +36,10 @@ module.exports =
       title: "Open in development mode"
       type: "boolean"
       default: false
+    notificationsEnabled:
+      title: "Notifications enabled"
+      type: "boolean"
+      default: true
 
   projects: []
   gitProjectsView: null
@@ -57,7 +61,8 @@ module.exports =
     packageConfig = @readPackageConfigFile()
     if !packageConfig || packageConfig.version != packageVersion
       @writePackageConfigFile({version: packageVersion})
-      atom.notifications.addInfo('<strong>Thanks for using <em>Git projects</em> !</strong><br> Any issue? <a href=\"https://github.com/prrrnd/atom-git-projects/issues/new\">Let us know!</a>', dismissable: true)
+      if atom.config.get('git-projects.notificationsEnabled')
+        atom.notifications.addInfo('<strong>Thanks for using <em>Git projects</em> !</strong><br> Any issue? <a href=\"https://github.com/prrrnd/atom-git-projects/issues/new\">Let us know!</a>', dismissable: true)
 
   openProject: (project) ->
     atom.open options =
