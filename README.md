@@ -21,14 +21,16 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
 ### Settings
 
-| Key              | Default value      | Possible values                                            |
-|------------------|--------------------|------------------------------------------------------------|
-| `rootPath`       | `~/`               | One or more directories containing projects, sep. by `;`   |
-| `ignoredPath`    | ` `                | One or more directories containing projects, sep. by `;`   |
-| `ignoredPatterns`| `node_modules;.git`| One or more patterns to ignore, sep. by `;`                |
-| `sortBy`         | `"Project name"`   | `"Project name"`, `"Last modification date"`, `"Size"`     |
-| `showSubRepos`   | `false`            | `true`, `false`                                            |
-| `openInDevMode`  | `false`            | `true`, `false`                                            |
+| Key                     | Default value      | Possible values                                            |
+|-------------------------|--------------------|------------------------------------------------------------|
+| `rootPath`              | `~/`               | One or more directories containing projects, sep. by `;`   |
+| `ignoredPath`           | ` `                | One or more directories containing projects, sep. by `;`   |
+| `ignoredPatterns`       | `node_modules;.git`| One or more patterns to ignore, sep. by `;`                |
+| `sortBy`                | `"Project name"`   | `"Project name"`, `"Last modification date"`, `"Size"`     |
+| `showSubRepos`          | `false`            | `true`, `false`                                            |
+| `openInDevMode`         | `false`            | `true`, `false`                                            |
+| `notificationsEnabled`  | `true`             | `true`, `false`                                            |
+| `showGitInfo`           | `true`             | `true`, `false`                                            |
 
 ### Project-specific configuration
 
@@ -45,6 +47,14 @@ If you don't want a project to be listed, add a `.git-project` file at its root 
 ```json
 {
   "ignored": true
+}
+```
+
+The project icon can also be customized.
+```json
+{
+  "title": "Custom icon",
+  "icon": "icon-file-text"
 }
 ```
 
