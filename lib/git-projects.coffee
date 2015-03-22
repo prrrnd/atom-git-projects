@@ -40,6 +40,10 @@ module.exports =
       title: "Notifications enabled"
       type: "boolean"
       default: true
+    showGitInfo:
+      title: "Display the branch and a status icon in the list of projects"
+      type: "boolean"
+      default: true
 
   projects: []
   gitProjectsView: null
