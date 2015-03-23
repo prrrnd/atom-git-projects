@@ -1,3 +1,6 @@
+## 1.11.1
+* Fixes dirty git repositories detection
+
 ## 1.11.0
 * Possibility to disable notifications
 * Added a loading message while Git projects finds repositories
