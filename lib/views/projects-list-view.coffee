@@ -1,20 +1,18 @@
 {$, $$, SelectListView, View} = require 'atom-space-pen-views'
-fs = require 'fs'
+fs = require 'fs-plus'
 path = require 'path'
 Project = require '../models/project'
 
 module.exports =
-class GitProjectsView extends SelectListView
-  gitProjects: null
+class ProjectsListView extends SelectListView
+  controller: null
 
   activate: ->
-    new GitProjectsView
+    new ProjectsListView
 
   initialize: (serializeState) ->
     super
     @addClass('git-projects')
-
-  serialize: ->
 
   getFilterKey: ->
     'title'
@@ -26,7 +24,7 @@ class GitProjectsView extends SelectListView
     @hide()
 
   confirmed: (project) ->
-    @gitProjects.openProject(project)
+    @controller.openProject(project)
     @cancel()
 
   getEmptyMessage: (itemCount, filteredItemCount) =>
@@ -36,8 +34,8 @@ class GitProjectsView extends SelectListView
     return msg unless itemCount
     return super
 
-  toggle: (gitProjects) ->
-    @gitProjects = gitProjects
+  toggle: (controller) ->
+    @controller = controller
     if @panel?.isVisible()
       @hide()
     else
@@ -45,18 +43,15 @@ class GitProjectsView extends SelectListView
 
   hide: ->
     @panel?.hide()
-    @gitProjects.clearProjectsList()
+    @controller.clearProjectsList()
 
   show: ->
     @panel ?= atom.workspace.addModalPanel(item: this)
-    @panel.show()
-    rootPath = atom.config.get('git-projects.rootPath')
-    ignoredPath = atom.config.get('git-projects.ignoredPath')
-    ignoredPatterns = atom.config.get('git-projects.ignoredPatterns')
-    @loading.text "Looking for repositories in #{rootPath} ..."
+    @loading.text "Looking for repositories ..."
     @loadingArea.show()
+    @panel.show()
     setTimeout( =>
-      @setItems(@gitProjects.getGitProjects(rootPath, ignoredPath, ignoredPatterns))
+      @setItems(@controller.findGitRepos())
       @focusFilterEditor()
     , 0)
 

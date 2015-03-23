@@ -1,26 +1,26 @@
-fs = require 'fs'
+$ = require 'jquery'
+fs = require 'fs-plus'
 path = require 'path'
 utils = require './utils'
-settings = require './settings'
-CSON = require 'season'
-GitProjectsView = require './views/git-projects-view'
+
 Project = require './models/project'
-separator = "Separate paths with semicolons"
-packageVersion = require("../package.json").version
-packageConfigFilePath = __dirname + "/../.config"
+ProjectsListView = require './views/projects-list-view'
 
 module.exports =
   config:
     rootPath:
-      title: "Paths to folders containing project folders. #{separator}."
+      title: "Root paths"
+      description: "Paths to folders containing Git repositories, separated by semicolons."
       type: "string"
-      default: settings.getDefaultRootPath()
+      default: fs.absolute(fs.getHomeDirectory() + "#{path.sep}repos")
     ignoredPath:
-      title: "Paths to folders that should be ignored. #{separator}."
+      title: "Ignored paths"
+      description: "Paths to folders that should be ignored, separated by semicolons."
       type: "string"
       default: ""
     ignoredPatterns:
-      title: "Patterns that should be ignored (e.g.: node_modules). #{separator}."
+      title: "Ignored patterns"
+      description: "Patterns that should be ignored (e.g.: node_modules), separated by semicolons."
       type: "string"
       default: "node_modules;\\.git"
     sortBy:
@@ -41,59 +41,66 @@ module.exports =
       type: "boolean"
       default: true
     showGitInfo:
-      title: "Display the branch and a status icon in the list of projects"
+      title: "Show repositories status"
+      description: "Display the branch and a status icon in the list of projects"
       type: "boolean"
       default: true
 
+
   projects: []
-  gitProjectsView: null
-
-  readPackageConfigFile: ->
-    if fs.existsSync(packageConfigFilePath)
-      CSON.readFileSync(packageConfigFilePath)
-
-  writePackageConfigFile: (object) ->
-    CSON.writeFileSync(packageConfigFilePath, object)
+  view: null
 
   activate: (state) ->
+    @checkForUpdates()
     atom.commands.add 'atom-workspace',
       'git-projects:toggle': =>
-        @createGitProjectsViewView(state).toggle(@)
-        @reportIssueMessage()
+        @createView().toggle(@)
 
-  reportIssueMessage: ->
-    packageConfig = @readPackageConfigFile()
-    if !packageConfig || packageConfig.version != packageVersion
-      @writePackageConfigFile({version: packageVersion})
-      if atom.config.get('git-projects.notificationsEnabled')
-        atom.notifications.addInfo('<strong>Thanks for using <em>Git projects</em> !</strong><br> Any issue? <a href=\"https://github.com/prrrnd/atom-git-projects/issues/new\">Let us know!</a>', dismissable: true)
 
+  # Checks for updates by sending an ajax request to the latest package.json
+  # hosted on Github.
+  checkForUpdates: ->
+    packageVersion = require("../package.json").version
+    $.ajax({
+      url: 'https://raw.githubusercontent.com/prrrnd/atom-git-projects/master/package.json',
+      success: (data) ->
+        latest = JSON.parse(data).version
+        if(packageVersion != latest)
+          if atom.config.get('git-projects.notificationsEnabled')
+            atom.notifications.addInfo("<strong>Git projects</strong><br>Version #{latest} available!", dismissable: true)
+    })
+
+
+  # Opens a project. Supports for dev mode via package settings
+  #
+  # project - The {Project} to open.
   openProject: (project) ->
     atom.open options =
       pathsToOpen: [project.path]
       devMode: atom.config.get('git-projects.openInDevMode')
 
-  createGitProjectsViewView: (state) ->
-    @gitProjectsView ?= new GitProjectsView()
 
-  parsePathString: (str) ->
-    if str
-      paths = str.split(/\s*;\s*/g).map (_str) ->
-        _str = _str.trim().replace /^~/g, utils.getHomeDir()
-        if _str[-1..-1] isnt path.sep then _str + path.sep else _str
+  # Creates an instance of the list view
+  createView: ->
+    @view ?= new ProjectsListView()
 
-    new Set paths
 
-  getGitProjects: (rootPath=settings.getDefaultRootPath(), ignoredPath="", ignoredPattern="") ->
-    rootPaths = @parsePathString rootPath
-    ignoredPaths = @parsePathString ignoredPath
+  # Clears the projects array
+  clearProjectsList: ->
+    @projects = []
+
+
+  # Finds all the git repositories recursively from the given root path(s)
+  findGitRepos: (root = atom.config.get('git-projects.rootPath')) ->
+    rootPaths = utils.parsePathString(root)
+    ignoredPattern = atom.config.get('git-projects.ignoredPatterns')
+    ignoredPaths = utils.parsePathString(atom.config.get('git-projects.ignoredPath'))
 
     if ignoredPattern
-      if Object::toString.call( ignoredPattern ) == "[object RegExp]"
+      if Object::toString.call(ignoredPattern) == "[object RegExp]"
         ignoredPatterns = ignoredPattern
       else
-        patterns = ignoredPattern.split(/\s*;\s*/g).map (pattern) ->
-          pattern.trim().replace /^~/g, utils.getHomeDir()
+        patterns = ignoredPattern.split(/\s*;\s*/g)
         ignoredPatterns = new RegExp patterns.join("|"), "g"
 
     rootPaths.forEach (_path) =>
@@ -102,37 +109,18 @@ module.exports =
          !fs.existsSync(_path)
         return
 
-      gitProjects = fs.readdirSync(_path)
-
-      for _, name of gitProjects
-        projectPath = _path + name
-
+      for _, name of fs.readdirSync(_path)
+        projectPath = _path + path.sep + name
         if (!ignoredPatterns or !ignoredPatterns.test(_path)) and
            !ignoredPaths.has(projectPath + path.sep) and
-           fs.lstatSync(projectPath).isDirectory()
+           fs.isDirectorySync(projectPath)
 
-          if utils.isGitProject(projectPath)
+          if utils.isRepositorySync(projectPath)
             project = new Project(name, projectPath, "icon-repo", false)
-            data = @readProjectConfigFile(project)
-            project = @updateProjectFromConfigFileData(data, project)
-            @projects.push(project) if !project.ignored
-            if atom.config.get('git-projects.showSubRepos')
-              @getGitProjects(projectPath, ignoredPath, ignoredPatterns)
-          else @getGitProjects(projectPath, ignoredPath, ignoredPatterns)
+            if !project.ignored
+              @projects.push(project)
+              if atom.config.get('git-projects.showSubRepos')
+                @findGitRepos(projectPath)
+          else @findGitRepos(projectPath)
 
     return utils.sortBy(@projects)
-
-  clearProjectsList: ->
-    @projects = []
-
-  readProjectConfigFile: (project) ->
-    filepath = project.path + path.sep + ".git-project"
-    data = {}
-    data = CSON.readFileSync(filepath) if fs.existsSync(filepath)
-
-  updateProjectFromConfigFileData: (data, project) ->
-    return project unless data?
-    project.title = data['title'] if data['title']?
-    project.ignored = data['ignore'] if data['ignore']?
-    project.icon = data['icon'] if data['icon']?
-    project

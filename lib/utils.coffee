@@ -1,4 +1,4 @@
-fs = require 'fs'
+fs = require 'fs-plus'
 path = require 'path'
 
 sorts = new Map
@@ -10,15 +10,22 @@ sorts.set 'Size', (a, b) ->
   fs.statSync(a.path)['size'] < fs.statSync(b.path)['size']
 
 module.exports =
-getHomeDir: ->
-  process.env["HOME"] || process.env["HOMEPATH"] || process.env["USERPROFILE"]
 
-isGitProject: (project) ->
-  gitDir = project + path.sep + ".git"
-  @isDir(project) && fs.existsSync(gitDir) && @isDir(gitDir)
+# Returns true if the passed dir contains a ".git"
+isRepositorySync: (dir) ->
+  fs.existsSync(dir + path.sep + ".git")
 
-isDir: (path) ->
-  fs.lstatSync(path).isDirectory()
 
+# Returns a sorted {Array} of projects based on the package settings
+# array - {Array} of {Project}s to sort
 sortBy: (array) ->
   array.sort sorts.get atom.config.get('git-projects.sortBy')
+
+
+# Returns a {Set} of paths
+# str - {String} containing paths separated by semicolons
+parsePathString: (str) ->
+  if str
+    paths = str.split(/\s*;\s*/g).map (_str) ->
+      _str = fs.normalize(_str)
+  new Set paths

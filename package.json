@@ -10,7 +10,8 @@
     "git",
     "workflow",
     "list",
-    "open"
+    "open",
+    "productivity"
   ],
   "engines": {
     "atom": ">0.50.0"
@@ -18,6 +19,8 @@
   "dependencies": {
     "atom-space-pen-views": "^2.0.3",
     "git-utils": "^3.0.0",
-    "season": "1.x"
+    "season": "1.x",
+    "fs-plus": "2.6.0",
+    "jquery": "^2"
   }
 }

@@ -19,3 +19,21 @@ describe "Utils", ->
     it "sorts by name when sortBy == 'Project name'", ->
       atom.config.set('git-projects.sortBy', 'Project name')
       expect(utils.sortBy(projects)).toEqual(projectsSortedByName)
+
+  describe "parsePathString", ->
+    it "should be a function",
+      expect(utils.parsePathString).toBeFunction
+
+    it "should only take strings in parameter", ->
+      wrapper = (any) ->
+        return utils.parsePathString.bind this, any
+
+      expect(wrapper "").not.toThrow
+      expect(wrapper 1).toThrow
+      expect(wrapper null).toThrow
+
+    it "should return a Set", ->
+      expect(utils.parsePathString("")).toEqual(new Set)
+      expect(utils.parsePathString("path").size).toBe(1)
+      expect(utils.parsePathString("path; another_path").size).toBe(2)
+      expect(utils.parsePathString("same_path; same_path").size).toBe(1)
