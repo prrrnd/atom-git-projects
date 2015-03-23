@@ -6,7 +6,7 @@ class Project
 
   isDirty: ->
     repository = git.open @path
-    Object.keys(repository.getStatus()).length == 0
+    Object.keys(repository.getStatus()).length != 0
 
   branch: ->
     repository = git.open @path
