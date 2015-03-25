@@ -1,12 +1,21 @@
 [![Build Status](https://travis-ci.org/prrrnd/atom-git-projects.svg?branch=master)](https://travis-ci.org/prrrnd/atom-git-projects)
 
-## Git projects
+# Git projects
 
 _Git projects_ is a package for Atom, which allows you to quickly list and open your local git repositories.
 
 [![Git projects](https://github.com/prrrnd/atom-git-projects/raw/master/capture.gif)](https://atom.io/packages/git-projects)
 
-### Installation
+## Table of Contents
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Settings](#settings)
+  * [Project-specific configuration](#project-specific-configuration)
+  * [Known issues](#known-issues)
+  * [Other](#other)
+
+
+## Installation <a id="installation"></a>
 
 Simply run the following command:
 ```sh
@@ -15,11 +24,11 @@ apm install git-projects
 
 Or find the package in **Atom** &rarr; **Settings** &rarr; **Install** and search for "**git-projects**"
 
-### Usage
+## Usage <a id="usage"></a>
 
 Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 
-### Settings
+## Settings <a id="settings"></a>
 
 | Key                     | Default value      | Possible values                                            |
 |-------------------------|--------------------|------------------------------------------------------------|
@@ -32,7 +41,7 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 | `notificationsEnabled`  | `true`             | `true`, `false`                                            |
 | `showGitInfo`           | `true`             | `true`, `false`                                            |
 
-### Project-specific configuration
+## Project-specific configuration  <a id="project-specific-configuration"></a>
 
 _Git projects_ will read the content of any `.git-project` file located at the root of your Git repository (project).
 You can set a custom title for any project that will be shown in the list view.
@@ -58,16 +67,10 @@ The project icon can also be customized.
 }
 ```
 
-More options will be available in the future.
+## Known issues <a id="known-issues"></a>
 
-### Contributing
+- Windows/linux users and [git-utils](https://github.com/atom/git-utils/issues)
 
-1. Fork it ( https://github.com/prrrnd/atom-git-projects/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+## Other <a id="other"></a>
 
-### License
-
-Released under the [MIT License](http://www.opensource.org/licenses/MIT).
+You can follow me on [Twitter](https://twitter.com/prrrnd)
