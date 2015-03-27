@@ -28,7 +28,7 @@ class ProjectsListView extends SelectListView
     @cancel()
 
   getEmptyMessage: (itemCount, filteredItemCount) =>
-    msg = "No Git projects found in '#{atom.config.get('git-projects.rootPath')}'"
+    msg = "No repositories found in '#{atom.config.get('git-projects.rootPath')}'"
     query = @getFilterQuery()
     return "#{msg} for '#{query}'" if !filteredItemCount && query.length
     return msg unless itemCount

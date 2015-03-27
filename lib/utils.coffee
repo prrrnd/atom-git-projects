@@ -13,6 +13,7 @@ module.exports =
 
 # Returns true if the passed dir contains a ".git"
 isRepositorySync: (dir) ->
+  return false unless dir?
   fs.existsSync(dir + path.sep + ".git")
 
 
@@ -25,7 +26,9 @@ sortBy: (array) ->
 # Returns a {Set} of paths
 # str - {String} containing paths separated by semicolons
 parsePathString: (str) ->
-  if str
-    paths = str.split(/\s*;\s*/g).map (_str) ->
-      _str = fs.normalize(_str)
-  new Set paths
+  return null unless str?
+
+  paths = str.toString().split(/\s*;\s*/g).map (_str) ->
+    _str = fs.normalize(_str)
+
+  new Set(paths)

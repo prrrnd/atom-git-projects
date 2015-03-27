@@ -12,8 +12,8 @@ describe "Utils", ->
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     waitsForPromise = atom.packages.activatePackage('git-projects')
-    projects = [new Project("notification", "", false), new Project("settings-view", "", false), new Project("atom", "", false)]
-    projectsSortedByName = [new Project("atom", "", false), new Project("notification", "", false), new Project("settings-view", "", false)]
+    projects = [new Project("notification", "", "", false), new Project("settings-view", "", "", false), new Project("atom", "", "", false)]
+    projectsSortedByName = [new Project("atom", "", "", false), new Project("notification", "", "", false), new Project("settings-view", "", "", false)]
 
   describe "sortBy", ->
     it "sorts by name when sortBy == 'Project name'", ->
@@ -37,3 +37,11 @@ describe "Utils", ->
       expect(utils.parsePathString("path").size).toBe(1)
       expect(utils.parsePathString("path; another_path").size).toBe(2)
       expect(utils.parsePathString("same_path; same_path").size).toBe(1)
+      expect(utils.parsePathString("~").size).toBe(1)
+
+  describe "isRepositorySync", ->
+    it "should be a function",
+      expect(utils.isRepositorySync).toBeFunction
+
+    it "should return false if no params", ->
+      expect(utils.isRepositorySync()).toBe(false)

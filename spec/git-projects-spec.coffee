@@ -12,18 +12,23 @@ describe "GitProjects", ->
     waitsForPromise = atom.packages.activatePackage('git-projects')
 
   describe "when the git-projects:toggle event is triggered", ->
-    it "Shows the view containing the list of projects", ->
+    it "Toggles the view containing the list of projects", ->
       atom.commands.dispatch workspaceElement, 'git-projects:toggle'
       expect($(workspaceElement).find('.git-projects')).toExist()
+      setTimeout( ->
+        atom.commands.dispatch workspaceElement, 'git-projects:toggle'
+        expect($(workspaceElement).find('.git-projects')).not.toExist()
+      , 0)
 
   describe "findGitRepos", ->
     it "should return an array", ->
       atom.config.set('git-projects.showSubRepos', false)
-      expect(GitProjects.findGitRepos()).toEqual([])
+      expect(GitProjects.findGitRepos()).toBeArray
       expect(GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")).toBeArray
 
     it "should work with sub directories", ->
       atom.config.set('git-projects.showSubRepos', true)
+      expect(GitProjects.findGitRepos()).toBeArray
       expect(GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")).toBeArray
 
     it "should not contain any of the ignored patterns", ->

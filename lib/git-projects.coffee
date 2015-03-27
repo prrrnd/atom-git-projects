@@ -93,6 +93,8 @@ module.exports =
   # Finds all the git repositories recursively from the given root path(s)
   findGitRepos: (root = atom.config.get('git-projects.rootPath')) ->
     rootPaths = utils.parsePathString(root)
+    return @projects unless rootPaths?
+
     ignoredPattern = atom.config.get('git-projects.ignoredPatterns')
     ignoredPaths = utils.parsePathString(atom.config.get('git-projects.ignoredPath'))
 
@@ -105,7 +107,7 @@ module.exports =
 
     rootPaths.forEach (_path) =>
       if (ignoredPatterns and ignoredPatterns.test(_path)) or
-         ignoredPaths.has(_path) or
+         (ignoredPaths and ignoredPaths.has(_path)) or
          !fs.existsSync(_path)
         return
 
