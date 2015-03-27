@@ -1,3 +1,8 @@
+## 1.12.0
+* Notification when a new update is available
+* Removed the "report issue" notification
+* Refactored code and bug fixes
+
 ## 1.11.1
 * Fixes dirty git repositories detection
 
