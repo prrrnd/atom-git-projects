@@ -61,8 +61,9 @@ class ProjectsListView extends SelectListView
         @div class: 'status status-added'
         @div class: 'primary-line icon ' + project.icon, =>
           @span project.title
-          @span " (#{project.branch()})" if atom.config.get('git-projects.showGitInfo')
-          if project.isDirty() and atom.config.get('git-projects.showGitInfo')
-            @span class: 'status status-modified icon icon-diff-modified'
+          if atom.config.get('git-projects.showGitInfo')
+            @span " (#{project.branch()})"
+            if project.isDirty()
+              @span class: 'status status-modified icon icon-diff-modified'
         @div class: 'secondary-line no-icon', =>
           @span project.path
