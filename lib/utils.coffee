@@ -1,5 +1,6 @@
 fs = require 'fs-plus'
 path = require 'path'
+git = require 'git-utils'
 
 sorts = new Map
 sorts.set 'Project name', (a, b) ->
@@ -11,10 +12,9 @@ sorts.set 'Size', (a, b) ->
 
 module.exports =
 
-# Returns true if the passed dir contains a ".git"
+# Returns true if the passed dir is a Git repo
 isRepositorySync: (dir) ->
-  return false unless dir?
-  fs.existsSync(dir + path.sep + ".git")
+  return dir? and git.open(dir)?
 
 
 # Returns a sorted {Array} of projects based on the package settings
