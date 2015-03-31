@@ -22,21 +22,15 @@ describe "GitProjects", ->
 
   describe "findGitRepos", ->
     it "should return an array", ->
-      atom.config.set('git-projects.showSubRepos', false)
       expect(GitProjects.findGitRepos()).toBeArray
-      expect(GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")).toBeArray
-
-    it "should work with sub directories", ->
-      atom.config.set('git-projects.showSubRepos', true)
-      expect(GitProjects.findGitRepos()).toBeArray
-      expect(GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")).toBeArray
+      expect(GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake")).toBeArray
 
     it "should not contain any of the ignored patterns", ->
-      projects = GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")
+      projects = GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake")
       projects.forEach (project) ->
         expect(project.path).not.toMatch( /node_modules|\.git/g )
 
     it "should not contain any of the ignored paths", ->
-      projects = GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", "~/workspace/www", "node_modules;.git")
+      projects = GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake")
       projects.forEach (project) ->
         expect(project.path).not.toMatch( /\/workspace\/www/g )

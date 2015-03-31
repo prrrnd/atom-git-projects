@@ -28,10 +28,6 @@ module.exports =
       type: "string"
       default: "Project name"
       enum: ["Project name", "Latest modification date", "Size"]
-    showSubRepos:
-      title: "Show sub-repositories"
-      type: "boolean"
-      default: false
     openInDevMode:
       title: "Open in development mode"
       type: "boolean"
@@ -90,39 +86,33 @@ module.exports =
     @projects = []
 
 
+  # Determines if a path should be ignored based on the package settings
+  # Returns true if the given _path should be ignored, false otherwise
+  #
+  # _path - {String} the path to test
+  shouldIgnorePath: (_path) ->
+    return true unless fs.isDirectorySync(_path)
+    ignoredPaths = utils.parsePathString(atom.config.get('git-projects.ignoredPath'))
+    ignoredPattern = new RegExp(atom.config.get('git-projects.ignoredPatterns').split(/\s*;\s*/g).join("|"), "g")
+    return true if ignoredPattern.test(_path)
+    return ignoredPaths and ignoredPaths.has(_path)
+
+
   # Finds all the git repositories recursively from the given root path(s)
+  #
+  # root - {String} the path to search from
   findGitRepos: (root = atom.config.get('git-projects.rootPath')) ->
     rootPaths = utils.parsePathString(root)
     return @projects unless rootPaths?
 
-    ignoredPattern = atom.config.get('git-projects.ignoredPatterns')
-    ignoredPaths = utils.parsePathString(atom.config.get('git-projects.ignoredPath'))
-
-    if ignoredPattern
-      if Object::toString.call(ignoredPattern) == "[object RegExp]"
-        ignoredPatterns = ignoredPattern
-      else
-        patterns = ignoredPattern.split(/\s*;\s*/g)
-        ignoredPatterns = new RegExp patterns.join("|"), "g"
-
-    rootPaths.forEach (_path) =>
-      if (ignoredPatterns and ignoredPatterns.test(_path)) or
-         (ignoredPaths and ignoredPaths.has(_path)) or
-         !fs.existsSync(_path)
-        return
-
-      for _, name of fs.readdirSync(_path)
-        projectPath = _path + path.sep + name
-        if (!ignoredPatterns or !ignoredPatterns.test(_path)) and
-           !ignoredPaths.has(projectPath + path.sep) and
-           fs.isDirectorySync(projectPath)
-
-          if utils.isRepositorySync(projectPath)
-            project = new Project(name, projectPath, "icon-repo", false)
-            if !project.ignored
-              @projects.push(project)
-              if atom.config.get('git-projects.showSubRepos')
-                @findGitRepos(projectPath)
-          else @findGitRepos(projectPath)
+    rootPaths.forEach (rootPath) =>
+      unless @shouldIgnorePath(rootPath)
+        for _, _path of fs.listSync(rootPath)
+          unless @shouldIgnorePath(_path)
+            if utils.isRepositorySync(_path)
+              project = new Project(_path)
+              unless project.ignored
+                @projects.push(project)
+            else @findGitRepos(_path)
 
     return utils.sortBy(@projects)

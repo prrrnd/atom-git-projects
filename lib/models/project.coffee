@@ -1,9 +1,13 @@
 git = require 'git-utils'
+_path = require 'path'
 CSON = require 'season'
 
 module.exports =
 class Project
-  constructor: (@title, @path, @icon, @ignored) ->
+  constructor: (@path) ->
+    @icon = "icon-repo"
+    @ignored = false
+    @title = _path.basename(@path)
     @readConfigFile()
 
   isDirty: ->

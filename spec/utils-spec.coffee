@@ -12,8 +12,8 @@ describe "Utils", ->
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     waitsForPromise = atom.packages.activatePackage('git-projects')
-    projects = [new Project("notification", "", "", false), new Project("settings-view", "", "", false), new Project("atom", "", "", false)]
-    projectsSortedByName = [new Project("atom", "", "", false), new Project("notification", "", "", false), new Project("settings-view", "", "", false)]
+    projects = [new Project("notification"), new Project("settings-view"), new Project("atom")]
+    projectsSortedByName = [new Project("atom"), new Project("notification"), new Project("settings-view")]
 
   describe "sortBy", ->
     it "sorts by name when sortBy == 'Project name'", ->
