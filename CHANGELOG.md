@@ -1,3 +1,9 @@
+## 1.13.0
+* Removed sub repositories support for now
+* Improved performances
+* Better detection of Git repositories
+* Fixed a bug related to permissions
+
 ## 1.12.0
 * Notification when a new update is available
 * Removed the "report issue" notification
