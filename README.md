@@ -36,7 +36,6 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 | `ignoredPath`           | ` `                | One or more directories containing projects, sep. by `;`   |
 | `ignoredPatterns`       | `node_modules;.git`| One or more patterns to ignore, sep. by `;`                |
 | `sortBy`                | `"Project name"`   | `"Project name"`, `"Last modification date"`, `"Size"`     |
-| `showSubRepos`          | `false`            | `true`, `false`                                            |
 | `openInDevMode`         | `false`            | `true`, `false`                                            |
 | `notificationsEnabled`  | `true`             | `true`, `false`                                            |
 | `showGitInfo`           | `true`             | `true`, `false`                                            |
