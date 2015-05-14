@@ -91,9 +91,8 @@ module.exports =
   #
   # _path - {String} the path to test
   shouldIgnorePath: (_path) ->
-    return true unless fs.isDirectorySync(_path)
     ignoredPaths = utils.parsePathString(atom.config.get('git-projects.ignoredPath'))
-    ignoredPattern = new RegExp(atom.config.get('git-projects.ignoredPatterns').split(/\s*;\s*/g).join("|"), "g")
+    ignoredPattern = new RegExp((atom.config.get('git-projects.ignoredPatterns') || "").split(/\s*;\s*/g).join("|"), "g")
     return true if ignoredPattern.test(_path)
     return ignoredPaths and ignoredPaths.has(_path)
 
@@ -101,18 +100,29 @@ module.exports =
   # Finds all the git repositories recursively from the given root path(s)
   #
   # root - {String} the path to search from
-  findGitRepos: (root = atom.config.get('git-projects.rootPath')) ->
+  findGitRepos: (root = atom.config.get('git-projects.rootPath'), cb) ->
     rootPaths = utils.parsePathString(root)
-    return @projects unless rootPaths?
+    return cb(@projects) unless rootPaths?
 
+    pathsChecked = 0
     rootPaths.forEach (rootPath) =>
-      unless @shouldIgnorePath(rootPath)
-        for _, _path of fs.listSync(rootPath)
-          unless @shouldIgnorePath(_path)
-            if utils.isRepositorySync(_path)
-              project = new Project(_path)
-              unless project.ignored
-                @projects.push(project)
-            else @findGitRepos(_path)
+      pathsChecked++;
+      
+      sendCallback = =>
+        if pathsChecked == rootPaths.size
+          cb(utils.sortBy(@projects))
+          
+      return sendCallback() if @shouldIgnorePath(rootPath)
 
-    return utils.sortBy(@projects)
+      fs.traverseTree(rootPath, (->), (_dir) =>
+        return false if @shouldIgnorePath(_dir)
+        if utils.isRepositorySync(_dir)
+          project = new Project(_dir)
+          unless project.ignored
+            @projects.push(project)
+          return false
+        return true
+      , =>
+        sendCallback()
+      )
+
