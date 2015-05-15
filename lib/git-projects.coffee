@@ -28,6 +28,11 @@ module.exports =
       type: "string"
       default: "Project name"
       enum: ["Project name", "Latest modification date", "Size"]
+    maxDepth:
+      title: "Max Folder Depth"
+      type: 'integer'
+      default: 5
+      minimum: 1
     openInDevMode:
       title: "Open in development mode"
       type: "boolean"
@@ -114,6 +119,9 @@ module.exports =
           
       return sendCallback() if @shouldIgnorePath(rootPath)
 
+      rootDepth = rootPath.split(path.sep).length
+      maxDepth = atom.config.get('git-projects.maxDepth')
+      
       fs.traverseTree(rootPath, (->), (_dir) =>
         return false if @shouldIgnorePath(_dir)
         if utils.isRepositorySync(_dir)
@@ -121,7 +129,9 @@ module.exports =
           unless project.ignored
             @projects.push(project)
           return false
-        return true
+        
+        dirDepth = _dir.split(path.sep).length;
+        return rootDepth + maxDepth < dirDepth
       , =>
         sendCallback()
       )
