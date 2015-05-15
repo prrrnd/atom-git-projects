@@ -1,6 +1,7 @@
 git = require 'git-utils'
 _path = require 'path'
 CSON = require 'season'
+fs = require 'fs'
 
 module.exports =
 class Project
@@ -19,7 +20,7 @@ class Project
     repository.getShortHead()
 
   readConfigFile: ->
-    filepath = @path + path.sep + ".git-project"
+    filepath = @path + _path.sep + ".git-project"
     if fs.existsSync(filepath)
       data = CSON.readFileSync(filepath)
       if data?
