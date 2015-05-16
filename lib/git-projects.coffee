@@ -131,7 +131,7 @@ module.exports =
           return false
         
         dirDepth = _dir.split(path.sep).length;
-        return rootDepth + maxDepth < dirDepth
+        return rootDepth + maxDepth > dirDepth
       , =>
         sendCallback()
       )
