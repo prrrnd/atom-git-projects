@@ -10,6 +10,10 @@ sorts.set 'Latest modification date', (a, b) ->
 sorts.set 'Size', (a, b) ->
   fs.statSync(a.path)['size'] < fs.statSync(b.path)['size']
 
+cmp = (sort) ->
+  return (a, b) ->
+    return if sort(a, b) then 1 else -1
+
 module.exports =
 
 # Returns true if the passed dir is a Git repo
@@ -20,7 +24,7 @@ isRepositorySync: (dir) ->
 # Returns a sorted {Array} of projects based on the package settings
 # array - {Array} of {Project}s to sort
 sortBy: (array) ->
-  array.sort sorts.get atom.config.get('git-projects.sortBy')
+  array.sort cmp(sorts.get(atom.config.get('git-projects.sortBy')))
 
 
 # Returns a {Set} of paths
