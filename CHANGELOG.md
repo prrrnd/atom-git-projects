@@ -1,3 +1,10 @@
+## 1.14.0
+* Fixed missing variables
+* Fixed sort order
+* Improved performances and asynchronous listing of projects
+
+Thanks to [@sberan](https://github.com/sberan)
+
 ## 1.13.0
 * Removed sub repositories support for now
 * Improved performances
