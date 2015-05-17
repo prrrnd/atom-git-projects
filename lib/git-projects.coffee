@@ -111,7 +111,6 @@ module.exports =
 
     pathsChecked = 0
     rootPaths.forEach (rootPath) =>
-      pathsChecked++;
       
       sendCallback = =>
         if pathsChecked == rootPaths.size
@@ -133,6 +132,7 @@ module.exports =
         dirDepth = _dir.split(path.sep).length;
         return rootDepth + maxDepth > dirDepth
       , =>
+        pathsChecked++;
         sendCallback()
       )
 
