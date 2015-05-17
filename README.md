@@ -39,6 +39,7 @@ Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
 | `openInDevMode`         | `false`            | `true`, `false`                                            |
 | `notificationsEnabled`  | `true`             | `true`, `false`                                            |
 | `showGitInfo`           | `true`             | `true`, `false`                                            |
+| `maxDepth`              | `5`                | Max number of directories to traverse from root            |
 
 ## Project-specific configuration  <a id="project-specific-configuration"></a>
 
