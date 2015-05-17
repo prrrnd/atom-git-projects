@@ -113,7 +113,7 @@ module.exports =
     rootPaths.forEach (rootPath) =>
       
       sendCallback = =>
-        if pathsChecked == rootPaths.size
+        if ++pathsChecked == rootPaths.size
           cb(utils.sortBy(@projects))
           
       return sendCallback() if @shouldIgnorePath(rootPath)
@@ -132,7 +132,6 @@ module.exports =
         dirDepth = _dir.split(path.sep).length;
         return rootDepth + maxDepth > dirDepth
       , =>
-        pathsChecked++;
         sendCallback()
       )
 
