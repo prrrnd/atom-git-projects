@@ -1,3 +1,6 @@
+## 1.14.1
+* Fixed callback behavior with multiple root paths
+
 ## 1.14.0
 * Fixed missing variables
 * Fixed sort order
