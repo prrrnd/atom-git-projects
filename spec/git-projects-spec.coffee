@@ -22,38 +22,38 @@ describe "GitProjects", ->
 
   describe "findGitRepos", ->
     it "should return an array", ->
-      asserts = 0;
-      runs(=>
-        GitProjects.findGitRepos(null, (repos) => 
-          expect(repos).toBeArray;
-          asserts++;
+      asserts = 0
+      runs(->
+        GitProjects.findGitRepos(null, (repos) ->
+          expect(repos).toBeArray
+          asserts++
         )
-        
-        GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", (repos) =>
-          expect(repos).toBeArray;
-          asserts++;
+
+        GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", (repos) ->
+          expect(repos).toBeArray
+          asserts++
         )
       )
-      waitsFor(=> asserts == 2)
-    
+      waitsFor(-> asserts == 2)
+
     it "should not contain any of the ignored patterns", ->
-      done = false;
-      runs(=>
-        GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", (projects) =>
+      done = false
+      runs(->
+        GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", (projects) ->
           projects.forEach (project) ->
             expect(project.path).not.toMatch( /node_modules|\.git/g )
-          done = true;
+          done = true
         )
       )
-      waitsFor(=> done)
-    
+      waitsFor(-> done)
+
     it "should not contain any of the ignored paths", ->
-      done = false;
-      runs(=>
-        GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", (projects) =>
+      done = false
+      runs(->
+        GitProjects.findGitRepos("~/workspace/;~/workspace; ~/workspace/fake", (projects) ->
           projects.forEach (project) ->
             expect(project.path).not.toMatch( /\/workspace\/www/g )
-          done = true;
+          done = true
         )
       )
-      waitsFor(=> done)
+      waitsFor(-> done)

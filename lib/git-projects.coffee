@@ -111,16 +111,16 @@ module.exports =
 
     pathsChecked = 0
     rootPaths.forEach (rootPath) =>
-      
+
       sendCallback = =>
         if ++pathsChecked == rootPaths.size
           cb(utils.sortBy(@projects))
-          
+
       return sendCallback() if @shouldIgnorePath(rootPath)
 
       rootDepth = rootPath.split(path.sep).length
       maxDepth = atom.config.get('git-projects.maxDepth')
-      
+
       fs.traverseTree(rootPath, (->), (_dir) =>
         return false if @shouldIgnorePath(_dir)
         if utils.isRepositorySync(_dir)
@@ -128,10 +128,9 @@ module.exports =
           unless project.ignored
             @projects.push(project)
           return false
-        
-        dirDepth = _dir.split(path.sep).length;
+
+        dirDepth = _dir.split(path.sep).length
         return rootDepth + maxDepth > dirDepth
-      , =>
+      , ->
         sendCallback()
       )
-
