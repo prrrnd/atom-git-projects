@@ -111,10 +111,9 @@ module.exports =
 
     pathsChecked = 0
     rootPaths.forEach (rootPath) =>
-      pathsChecked++;
       
       sendCallback = =>
-        if pathsChecked == rootPaths.size
+        if ++pathsChecked == rootPaths.size
           cb(utils.sortBy(@projects))
           
       return sendCallback() if @shouldIgnorePath(rootPath)
