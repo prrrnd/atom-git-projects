@@ -33,7 +33,7 @@ describe "Utils", ->
       expect(wrapper null).toThrow
 
     it "should return a Set", ->
-      expect(utils.parsePathString("")).toEqual(new Set)
+      expect(utils.parsePathString("")).toEqual(new Set(["."]))
       expect(utils.parsePathString("path").size).toBe(1)
       expect(utils.parsePathString("path; another_path").size).toBe(2)
       expect(utils.parsePathString("same_path; same_path").size).toBe(1)
