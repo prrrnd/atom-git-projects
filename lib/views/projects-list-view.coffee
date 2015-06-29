@@ -43,7 +43,6 @@ class ProjectsListView extends SelectListView
 
   hide: ->
     @panel?.hide()
-    @controller.clearProjectsList()
 
   show: ->
     @panel ?= atom.workspace.addModalPanel(item: this)

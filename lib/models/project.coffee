@@ -3,8 +3,10 @@ _path = require 'path'
 CSON = require 'season'
 fs = require 'fs'
 
-module.exports =
 class Project
+  @deserialize: (instance) ->
+    new ProjectDeserialized instance
+
   constructor: (@path) ->
     @icon = "icon-repo"
     @ignored = false
@@ -27,3 +29,12 @@ class Project
         @title = data['title'] if data['title']?
         @ignored = data['ignore'] if data['ignore']?
         @icon = data['icon'] if data['icon']?
+
+class ProjectDeserialized extends Project
+  constructor: (instance) ->
+    @path = instance.path
+    @icon = instance.icon
+    @ignored = instance.ignored
+    @title = instance.title
+
+module.exports = Project
