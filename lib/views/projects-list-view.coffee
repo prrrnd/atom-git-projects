@@ -6,6 +6,7 @@ Project = require '../models/project'
 module.exports =
 class ProjectsListView extends SelectListView
   controller: null
+  cachedViews: new Map
 
   activate: ->
     new ProjectsListView
@@ -45,6 +46,7 @@ class ProjectsListView extends SelectListView
     @panel?.hide()
 
   show: ->
+    @cachedViews.clear()
     @panel ?= atom.workspace.addModalPanel(item: this)
     @loading.text "Looking for repositories ..."
     @loadingArea.show()
@@ -76,6 +78,7 @@ class ProjectsListView extends SelectListView
     )
 
   viewForItem: (project) ->
+    if cachedView = @cachedViews.get(project) then return cachedView
     view = $$ ->
       @li class: 'two-lines', =>
         @div class: 'status status-added'
@@ -97,4 +100,6 @@ class ProjectsListView extends SelectListView
         project.readGitInfo ->
           createdSubview?.remove()
           subview()
+
+    @cachedViews.set(project, view)
     return view
