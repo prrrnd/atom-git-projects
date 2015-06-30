@@ -46,23 +46,24 @@ class ProjectsListView extends SelectListView
     @panel?.hide()
 
   show: ->
-    @cachedViews.clear()
     @panel ?= atom.workspace.addModalPanel(item: this)
     @loading.text "Looking for repositories ..."
     @loadingArea.show()
     @panel.show()
-
     # Show the cached projects right away
-    cachedProjects = @controller.projects
-    if cachedProjects?
-      @setItems(cachedProjects)
-      @focusFilterEditor()
-
+    @cachedProjects = @controller.projects
+    @setItems(@cachedProjects) if @cachedProjects?
+    @focusFilterEditor()
     # Then show the refreshed projects
-    @controller.findGitRepos(null, (repos) =>
+    setImmediate => @refreshItems()
+
+  refreshItems: ->
+    @cachedViews.clear()
+    @controller.findGitRepos null, (repos) =>
       projectMap = {}
-      cachedProjects?.forEach (project) ->
+      @cachedProjects?.forEach (project) ->
         projectMap[project.path] = project
+
       # Copy some properties from the cached objects
       # But mark the object as stale so they are refreshed
       repos.map (repo) ->
@@ -74,8 +75,6 @@ class ProjectsListView extends SelectListView
         return repo
 
       @setItems(repos)
-      @focusFilterEditor()
-    )
 
   viewForItem: (project) ->
     if cachedView = @cachedViews.get(project) then return cachedView
