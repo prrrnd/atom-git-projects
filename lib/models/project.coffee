@@ -3,7 +3,19 @@ _path = require 'path'
 CSON = require 'season'
 fs = require 'fs'
 
+{Task} = require 'atom'
+ReadGitInfoTask = require.resolve '../read-git-info-task'
+
 class Project
+  # For caching
+  _stale: false
+  setStale: (value) -> @_stale = value
+  isStale: -> @_stale
+
+  # Properties
+  dirty: null
+  branch: null
+
   @deserialize: (instance) ->
     new ProjectDeserialized instance
 
@@ -13,13 +25,15 @@ class Project
     @title = _path.basename(@path)
     @readConfigFile()
 
-  isDirty: ->
-    repository = git.open @path
-    Object.keys(repository.getStatus()).length != 0
+  readGitInfo: (cb) ->
+    task = new Task(ReadGitInfoTask)
+    task.on 'result', (data) =>
+      @branch = data.branch
+      @dirty = data.dirty
+    task.start(@path, cb)
 
-  branch: ->
-    repository = git.open @path
-    repository.getShortHead()
+  hasGitInfo: ->
+    @branch? and @dirty?
 
   readConfigFile: ->
     filepath = @path + _path.sep + ".git-project"
@@ -36,5 +50,7 @@ class ProjectDeserialized extends Project
     @icon = instance.icon
     @ignored = instance.ignored
     @title = instance.title
+    @dirty = instance.dirty
+    @branch = instance.branch
 
 module.exports = Project

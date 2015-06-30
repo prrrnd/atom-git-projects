@@ -49,20 +49,52 @@ class ProjectsListView extends SelectListView
     @loading.text "Looking for repositories ..."
     @loadingArea.show()
     @panel.show()
+
+    # Show the cached projects right away
+    cachedProjects = @controller.projects
+    if cachedProjects?
+      @setItems(cachedProjects)
+      @focusFilterEditor()
+
+    # Then show the refreshed projects
     @controller.findGitRepos(null, (repos) =>
+      projectMap = {}
+      cachedProjects?.forEach (project) ->
+        projectMap[project.path] = project
+      # Copy some properties from the cached objects
+      # But mark the object as stale so they are refreshed
+      repos.map (repo) ->
+        project = projectMap[repo.path]
+        return repo unless project?
+        repo.branch = project.branch
+        repo.dirty = project.dirty
+        repo.setStale(true)
+        return repo
+
       @setItems(repos)
       @focusFilterEditor()
     )
 
   viewForItem: (project) ->
-    $$ ->
+    view = $$ ->
       @li class: 'two-lines', =>
         @div class: 'status status-added'
         @div class: 'primary-line icon ' + project.icon, =>
           @span project.title
-          if atom.config.get('git-projects.showGitInfo')
-            @span " (#{project.branch()})"
-            if project.isDirty()
-              @span class: 'status status-modified icon icon-diff-modified'
         @div class: 'secondary-line no-icon', =>
           @span project.path
+    if atom.config.get('git-projects.showGitInfo')
+      createdSubview = null
+      subview = ->
+        createdSubview = $$ ->
+          @span " (#{project.branch})"
+          if project.dirty
+            @span class: 'status status-modified icon icon-diff-modified'
+        view.find('.primary-line').append(createdSubview)
+
+      if project.hasGitInfo() then subview()
+      if not project.hasGitInfo() or project.isStale()
+        project.readGitInfo ->
+          createdSubview?.remove()
+          subview()
+    return view

@@ -50,15 +50,21 @@ module.exports =
       default: true
 
 
-  projects: []
+  projects: null
   view: null
 
   activate: (state) ->
     @checkForUpdates()
+    @projects = state.projectsCache?.map (project) ->
+      Project.deserialize(project)
+    @projects = @projects?.filter (project) ->
+      utils.isRepositorySync(project.path)
     atom.commands.add 'atom-workspace',
       'git-projects:toggle': =>
         @createView().toggle(@)
 
+  serialize: ->
+    projectsCache: @projects
 
   # Checks for updates by sending an ajax request to the latest package.json
   # hosted on Github.
