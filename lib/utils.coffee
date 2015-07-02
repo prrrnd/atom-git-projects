@@ -18,7 +18,7 @@ module.exports =
 
 # Returns true if the passed dir is a Git repo
 isRepositorySync: (dir) ->
-  return dir? and git.open(dir)?
+  return dir? and fs.existsSync(path.join(dir,'.git'))
 
 
 # Returns a sorted {Array} of projects based on the package settings
