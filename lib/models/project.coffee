@@ -5,6 +5,7 @@ fs = require 'fs'
 
 {Task} = require 'atom'
 ReadGitInfoTask = require.resolve '../read-git-info-task'
+TaskPool = require '../task-pool'
 
 class Project
   # For caching
@@ -27,10 +28,10 @@ class Project
 
   readGitInfo: (cb) ->
     task = new Task(ReadGitInfoTask)
-    task.on 'result', (data) =>
+    TaskPool.add task, @path, (data) =>
       @branch = data.branch
       @dirty = data.dirty
-    task.start(@path, cb)
+      cb()
 
   hasGitInfo: ->
     @branch? and @dirty?
