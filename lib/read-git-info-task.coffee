@@ -2,8 +2,12 @@ git = require 'git-utils'
 
 readGitInfo = (path) ->
   repository = git.open path
-  branch: repository.getShortHead()
-  dirty: Object.keys(repository.getStatus()).length != 0
+  result =
+    branch: repository.getShortHead()
+    dirty: Object.keys(repository.getStatus()).length != 0
+
+  repository.release()
+  return result
 
 module.exports = (path) ->
   # Indicates that this task will be async.
