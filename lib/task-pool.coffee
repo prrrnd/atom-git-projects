@@ -6,7 +6,6 @@ class TaskPool
   working: false
 
   constructor: (@size=4) ->
-    @size = 3
 
   run: ->
     @working = true
