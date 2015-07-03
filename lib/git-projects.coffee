@@ -54,7 +54,6 @@ module.exports =
   view: null
 
   activate: (state) ->
-    @checkForUpdates()
     if state.projectsCache?
       utils ?= require './utils'
       Project ?= require './models/project'
@@ -69,20 +68,6 @@ module.exports =
 
   serialize: ->
     projectsCache: @projects
-
-  # Checks for updates by sending an ajax request to the latest package.json
-  # hosted on Github.
-  checkForUpdates: ->
-    packageVersion = require("../package.json").version
-    require('jquery').ajax({
-      url: 'https://raw.githubusercontent.com/prrrnd/atom-git-projects/master/package.json',
-      success: (data) ->
-        latest = JSON.parse(data).version
-        if(packageVersion != latest)
-          if atom.config.get('git-projects.notificationsEnabled')
-            atom.notifications.addInfo("<strong>Git projects</strong><br>Version #{latest} available!", dismissable: true)
-    })
-
 
   # Opens a project. Supports for dev mode via package settings
   #
