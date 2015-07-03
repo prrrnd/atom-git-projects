@@ -18,13 +18,14 @@ module.exports =
 
 # Returns true if the passed dir is a Git repo
 isRepositorySync: (dir) ->
-  return dir? and git.open(dir)?
+  return dir? and fs.existsSync(path.join(dir,'.git'))
 
 
 # Returns a sorted {Array} of projects based on the package settings
+# sortKey - {String} the config value to sort by
 # array - {Array} of {Project}s to sort
-sortBy: (array) ->
-  array.sort cmp(sorts.get(atom.config.get('git-projects.sortBy')))
+sortBy: (sortKey, array) ->
+  array.sort cmp(sorts.get(sortKey))
 
 
 # Returns a {Set} of paths

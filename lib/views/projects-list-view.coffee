@@ -6,6 +6,7 @@ Project = require '../models/project'
 module.exports =
 class ProjectsListView extends SelectListView
   controller: null
+  cachedViews: new Map
 
   activate: ->
     new ProjectsListView
@@ -43,27 +44,61 @@ class ProjectsListView extends SelectListView
 
   hide: ->
     @panel?.hide()
-    @controller.clearProjectsList()
 
   show: ->
     @panel ?= atom.workspace.addModalPanel(item: this)
     @loading.text "Looking for repositories ..."
     @loadingArea.show()
     @panel.show()
-    @controller.findGitRepos(null, (repos) =>
+    # Show the cached projects right away
+    @cachedProjects = @controller.projects
+    @setItems(@cachedProjects) if @cachedProjects?
+    @focusFilterEditor()
+    # Then show the refreshed projects
+    setImmediate => @refreshItems()
+
+  refreshItems: ->
+    @cachedViews.clear()
+    @controller.findGitRepos null, (repos) =>
+      projectMap = {}
+      @cachedProjects?.forEach (project) ->
+        projectMap[project.path] = project
+
+      # Copy some properties from the cached objects
+      # But mark the object as stale so they are refreshed
+      repos.map (repo) ->
+        project = projectMap[repo.path]
+        return repo unless project?
+        repo.branch = project.branch
+        repo.dirty = project.dirty
+        repo.setStale(true)
+        return repo
+
       @setItems(repos)
-      @focusFilterEditor()
-    )
 
   viewForItem: (project) ->
-    $$ ->
+    if cachedView = @cachedViews.get(project) then return cachedView
+    view = $$ ->
       @li class: 'two-lines', =>
         @div class: 'status status-added'
         @div class: 'primary-line icon ' + project.icon, =>
           @span project.title
-          if atom.config.get('git-projects.showGitInfo')
-            @span " (#{project.branch()})"
-            if project.isDirty()
-              @span class: 'status status-modified icon icon-diff-modified'
         @div class: 'secondary-line no-icon', =>
           @span project.path
+    if atom.config.get('git-projects.showGitInfo')
+      createdSubview = null
+      subview = ->
+        createdSubview = $$ ->
+          @span " (#{project.branch})"
+          if project.dirty
+            @span class: 'status status-modified icon icon-diff-modified'
+        view.find('.primary-line').append(createdSubview)
+
+      if project.hasGitInfo() then subview()
+      if not project.hasGitInfo() or project.isStale()
+        project.readGitInfo ->
+          createdSubview?.remove()
+          subview()
+
+    @cachedViews.set(project, view)
+    return view

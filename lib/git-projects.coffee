@@ -1,10 +1,12 @@
-$ = require 'jquery'
 fs = require 'fs-plus'
 path = require 'path'
-utils = require './utils'
+{Task} = require 'atom'
 
-Project = require './models/project'
-ProjectsListView = require './views/projects-list-view'
+# defer these until used
+utils = null
+Project = null
+ProjectsListView = null
+FindGitReposTask = null
 
 module.exports =
   config:
@@ -48,21 +50,31 @@ module.exports =
       default: true
 
 
-  projects: []
+  projects: null
   view: null
 
   activate: (state) ->
     @checkForUpdates()
+    if state.projectsCache?
+      utils ?= require './utils'
+      Project ?= require './models/project'
+
+      filter = (project) -> utils.isRepositorySync(project.path)
+      map = (project) -> Project.deserialize(project)
+      @projects = state.projectsCache.filter(filter).map(map)
+
     atom.commands.add 'atom-workspace',
       'git-projects:toggle': =>
         @createView().toggle(@)
 
+  serialize: ->
+    projectsCache: @projects
 
   # Checks for updates by sending an ajax request to the latest package.json
   # hosted on Github.
   checkForUpdates: ->
     packageVersion = require("../package.json").version
-    $.ajax({
+    require('jquery').ajax({
       url: 'https://raw.githubusercontent.com/prrrnd/atom-git-projects/master/package.json',
       success: (data) ->
         latest = JSON.parse(data).version
@@ -83,54 +95,33 @@ module.exports =
 
   # Creates an instance of the list view
   createView: ->
+    ProjectsListView ?= require './views/projects-list-view'
     @view ?= new ProjectsListView()
-
-
-  # Clears the projects array
-  clearProjectsList: ->
-    @projects = []
-
-
-  # Determines if a path should be ignored based on the package settings
-  # Returns true if the given _path should be ignored, false otherwise
-  #
-  # _path - {String} the path to test
-  shouldIgnorePath: (_path) ->
-    ignoredPaths = utils.parsePathString(atom.config.get('git-projects.ignoredPath'))
-    ignoredPattern = new RegExp((atom.config.get('git-projects.ignoredPatterns') || "").split(/\s*;\s*/g).join("|"), "g")
-    return true if ignoredPattern.test(_path)
-    return ignoredPaths and ignoredPaths.has(_path)
 
 
   # Finds all the git repositories recursively from the given root path(s)
   #
   # root - {String} the path to search from
   findGitRepos: (root = atom.config.get('git-projects.rootPath'), cb) ->
+    utils ?= require './utils'
+    Project ?= require './models/project'
+    FindGitReposTask ?= require.resolve './find-git-repos-task'
+
     rootPaths = utils.parsePathString(root)
     return cb(@projects) unless rootPaths?
 
-    pathsChecked = 0
-    rootPaths.forEach (rootPath) =>
+    # The task doesn't have the `atom` global
+    config = {
+      maxDepth: atom.config.get('git-projects.maxDepth')
+      sortBy: atom.config.get('git-projects.sortBy')
+      ignoredPath: atom.config.get('git-projects.ignoredPath')
+      ignoredPatterns: atom.config.get('git-projects.ignoredPatterns')
+    }
 
-      sendCallback = =>
-        if ++pathsChecked == rootPaths.size
-          cb(utils.sortBy(@projects))
+    task = Task.once FindGitReposTask, root, config, =>
+      cb(@projects)
 
-      return sendCallback() if @shouldIgnorePath(rootPath)
-
-      rootDepth = rootPath.split(path.sep).length
-      maxDepth = atom.config.get('git-projects.maxDepth')
-
-      fs.traverseTree(rootPath, (->), (_dir) =>
-        return false if @shouldIgnorePath(_dir)
-        if utils.isRepositorySync(_dir)
-          project = new Project(_dir)
-          unless project.ignored
-            @projects.push(project)
-          return false
-
-        dirDepth = _dir.split(path.sep).length
-        return rootDepth + maxDepth > dirDepth
-      , ->
-        sendCallback()
-      )
+    task.on 'found-repos', (data) =>
+      # The projects emitted from the task must be deserialized first
+      @projects = data.map (project) ->
+        Project.deserialize(project)
