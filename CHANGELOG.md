@@ -1,3 +1,9 @@
+## 1.15.0
+* Caching of git projects and (crazy) performance improvements
+* Removed jQuery and the check for updates (Atom does this anyway)
+
+Thanks to [@JCCR](https://github.com/JCCR)
+
 ## 1.14.1
 * Fixed callback behavior with multiple root paths
 
