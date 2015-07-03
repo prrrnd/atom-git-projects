@@ -1,12 +1,12 @@
-$ = require 'jquery'
 fs = require 'fs-plus'
 path = require 'path'
 {Task} = require 'atom'
-utils = require './utils'
 
-Project = require './models/project'
-ProjectsListView = require './views/projects-list-view'
-FindGitReposTask = require.resolve './find-git-repos-task'
+# defer these until used
+utils = null
+Project = null
+ProjectsListView = null
+FindGitReposTask = null
 
 module.exports =
   config:
@@ -55,10 +55,14 @@ module.exports =
 
   activate: (state) ->
     @checkForUpdates()
-    @projects = state.projectsCache?.map (project) ->
-      Project.deserialize(project)
-    @projects = @projects?.filter (project) ->
-      utils.isRepositorySync(project.path)
+    if state.projectsCache?
+      utils ?= require './utils'
+      Project ?= require './models/project'
+
+      filter = (project) -> utils.isRepositorySync(project.path)
+      map = (project) -> Project.deserialize(project)
+      @projects = state.projectsCache.filter(filter).map(map)
+
     atom.commands.add 'atom-workspace',
       'git-projects:toggle': =>
         @createView().toggle(@)
@@ -70,7 +74,7 @@ module.exports =
   # hosted on Github.
   checkForUpdates: ->
     packageVersion = require("../package.json").version
-    $.ajax({
+    require('jquery').ajax({
       url: 'https://raw.githubusercontent.com/prrrnd/atom-git-projects/master/package.json',
       success: (data) ->
         latest = JSON.parse(data).version
@@ -91,6 +95,7 @@ module.exports =
 
   # Creates an instance of the list view
   createView: ->
+    ProjectsListView ?= require './views/projects-list-view'
     @view ?= new ProjectsListView()
 
 
@@ -98,6 +103,10 @@ module.exports =
   #
   # root - {String} the path to search from
   findGitRepos: (root = atom.config.get('git-projects.rootPath'), cb) ->
+    utils ?= require './utils'
+    Project ?= require './models/project'
+    FindGitReposTask ?= require.resolve './find-git-repos-task'
+
     rootPaths = utils.parsePathString(root)
     return cb(@projects) unless rootPaths?
 
