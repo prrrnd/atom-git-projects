@@ -1,3 +1,6 @@
+## 1.16.0
+* Support for Atom 1.2
+
 ## 1.15.0
 * Caching of git projects and (crazy) performance improvements
 * Removed jQuery and the check for updates (Atom does this anyway)
