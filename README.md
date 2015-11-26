@@ -27,7 +27,9 @@ Or find the package in **Atom** &rarr; **Settings** &rarr; **Install** and searc
 
 ## Usage <a id="usage"></a>
 
-Press `ctrl + alt + o` or type **Git Projects** in the Command Palette.
+Press `ctrl + alt + o` or type **Git Projects: Toggle** in the Command Palette to open project in a new window.
+
+Press `ctrl + alt + shift + o` or type **Git Projects: Toggle Add** in the Command Palette to add project to current window.
 
 ## Settings <a id="settings"></a>
 

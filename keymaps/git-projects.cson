@@ -9,3 +9,4 @@
 # https://atom.io/docs/latest/advanced/keymaps
 'atom-workspace':
   'ctrl-alt-o': 'git-projects:toggle'
+  'ctrl-alt-shift-o': 'git-projects:toggle-add'
