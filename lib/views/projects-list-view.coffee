@@ -7,6 +7,7 @@ module.exports =
 class ProjectsListView extends SelectListView
   controller: null
   cachedViews: new Map
+  type: null
 
   activate: ->
     new ProjectsListView
@@ -25,7 +26,10 @@ class ProjectsListView extends SelectListView
     @hide()
 
   confirmed: (project) ->
-    @controller.openProject(project)
+    if @type is 'add'
+      @controller.addProject(project)
+    else
+      @controller.openProject(project)
     @cancel()
 
   getEmptyMessage: (itemCount, filteredItemCount) =>
@@ -35,8 +39,9 @@ class ProjectsListView extends SelectListView
     return msg unless itemCount
     return super
 
-  toggle: (controller) ->
+  toggle: (controller, type) ->
     @controller = controller
+    @type = type
     if @panel?.isVisible()
       @hide()
     else

@@ -8,6 +8,10 @@
         {
           'label': 'Toggle Projects List'
           'command': 'git-projects:toggle'
+        },
+        {
+          'label': 'Toggle Projects List (Add To Project)'
+          'command': 'git-projects:toggle-add'
         }
       ]
     ]

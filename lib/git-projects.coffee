@@ -66,6 +66,10 @@ module.exports =
       'git-projects:toggle': =>
         @createView().toggle(@)
 
+    atom.commands.add 'atom-workspace',
+      'git-projects:toggle-add': =>
+        @createView().toggle(@, 'add')
+
   serialize: ->
     projectsCache: @projects
 
@@ -77,6 +81,11 @@ module.exports =
       pathsToOpen: [project.path]
       devMode: atom.config.get('git-projects.openInDevMode')
 
+  # Adds a project to the list of root paths.
+  #
+  # project - The {Project} to add.
+  addProject: (project) ->
+    atom.project.addPath project.path
 
   # Creates an instance of the list view
   createView: ->
