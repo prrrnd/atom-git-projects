@@ -1,3 +1,8 @@
+## 1.17.0
+* Add projects to current window using `ctrl + alt + shift + o`
+
+Thanks to [@jcurtis](https://github.com/jcurtis)
+
 ## 1.16.0
 * Support for Atom 1.2
 

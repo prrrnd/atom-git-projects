@@ -40,7 +40,6 @@ Press `ctrl + alt + shift + o` or type **Git Projects: Toggle Add** in the Comma
 | `ignoredPatterns`       | `node_modules;.git`| One or more patterns to ignore, sep. by `;`                |
 | `sortBy`                | `"Project name"`   | `"Project name"`, `"Last modification date"`, `"Size"`     |
 | `openInDevMode`         | `false`            | `true`, `false`                                            |
-| `notificationsEnabled`  | `true`             | `true`, `false`                                            |
 | `showGitInfo`           | `true`             | `true`, `false`                                            |
 | `maxDepth`              | `5`                | Max number of directories to traverse from root            |
 
