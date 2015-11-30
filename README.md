@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/prrrnd/atom-git-projects.svg?branch=master)](https://travis-ci.org/prrrnd/atom-git-projects)
 [![Code Climate](https://codeclimate.com/github/prrrnd/atom-git-projects/badges/gpa.svg)](https://codeclimate.com/github/prrrnd/atom-git-projects)
+[![Git projects](https://img.shields.io/apm/dm/git-projects.svg)](https://atom.io/packages/git-projects)
+[![Git projects](https://img.shields.io/apm/v/git-projects.svg)](https://atom.io/packages/git-projects)
 
 # Git projects
 
